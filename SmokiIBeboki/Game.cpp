@@ -60,7 +60,7 @@ void Game::update()
 	if (this->endGame == false)
 	{
 		//All stuff to update
-
+		this->ui->update();
 	}
 }
 
@@ -69,8 +69,12 @@ void Game::render()
 	//Clear window before new frame
 	this->window->clear();
 
-	//Render stuff
-	this->ui->render(*this->window);
+	//Dynamic sprite (room with 2 doors or within room)
+	this->ui->renderGV(*this->window);
+
+
+	//Static sprite (does not change)
+	this->ui->renderGUI(*this->window);
 
 	//Display new frame
 	this->window->display();
