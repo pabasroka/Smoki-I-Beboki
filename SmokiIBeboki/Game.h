@@ -9,11 +9,19 @@ private:
 	bool endGame;
 	sf::Event sfmlEvent;
 
+	//Game over
+	sf::Font font;
+	sf::Text gameOver;
+	sf::Text resetTxt;
+
 	//Objects from other classes
+	//Player* player;
+
 	UI* ui;
 
 	void initWindow();
 
+	void initGameOverText();
 	void initSprite();
 public:
 	//Constructor and Destructor
@@ -28,6 +36,7 @@ public:
 	//Functions (general stuff)
 	const bool running() const;
 	void pollEvents();
+	void reset();
 	
 	void update();
 	void render();

@@ -7,6 +7,29 @@ void Game::initWindow()
 	this->window->setFramerateLimit(60);
 }
 
+void Game::initGameOverText()
+{
+	if (!this->font.loadFromFile("Fonts/AncientModernTales-a7Po.ttf"))
+		std::cout << "Could not load font \n";
+
+	this->gameOver.setFont(font);
+	this->gameOver.setCharacterSize(120);
+	this->gameOver.setFillColor(sf::Color::Red);
+	this->gameOver.setOutlineColor(sf::Color::Black);
+	this->gameOver.setOutlineThickness(3.f);
+	this->gameOver.setPosition(120, 200);
+	this->gameOver.setString("GAME OVER !");
+
+	this->resetTxt.setFont(font);
+	this->resetTxt.setCharacterSize(90);
+	this->resetTxt.setFillColor(sf::Color::White);
+	this->resetTxt.setOutlineColor(sf::Color::Black);
+	this->resetTxt.setOutlineThickness(3.f);
+	this->resetTxt.setPosition(20, 350);
+	this->resetTxt.setString("PRESS 'R' TO RESET GAME !");
+
+}
+
 void Game::initSprite()
 {
 	this->ui = new UI;
@@ -16,6 +39,7 @@ Game::Game()
 {
 	this->initWindow();
 	this->initSprite();
+	this->initGameOverText();
 }
 
 Game::~Game()
@@ -53,29 +77,52 @@ void Game::pollEvents()
 	}
 }
 
+void Game::reset()
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+	{
+		this->endGame = false;
+		this->ui = new UI;
+	}
+	
+}
+
 void Game::update()
 {
 	this->pollEvents();
 
-	if (this->endGame == false)
-	{
-		//All stuff to update
-		this->ui->update();
-	}
+	//All stuff to update
+	this->ui->update();
+
+	if (this->ui->isDead())
+		this->endGame = true;
 }
 
 void Game::render()
 {
-	//Clear window before new frame
-	this->window->clear();
+	if (this->endGame)
+	{
+		this->window->clear(sf::Color::Black);
+		std::cout << "Game over! \n";
 
-	//Dynamic sprite (room with 2 doors or within room)
-	this->ui->renderGV(*this->window);
+		this->window->draw(gameOver);
+		this->window->draw(resetTxt);
+		this->reset();
+
+		//Display new frame
+		this->window->display();
+	}
+	else
+	{
+		//Clear window before new frame
+		this->window->clear();
+
+		//Render frame
+		this->ui->render(*this->window);
+
+		//Display new frame
+		this->window->display();
+	}
 
 
-	//Static sprite (does not change)
-	this->ui->renderGUI(*this->window);
-
-	//Display new frame
-	this->window->display();
 }

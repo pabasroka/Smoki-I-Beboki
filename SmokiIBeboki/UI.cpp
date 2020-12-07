@@ -5,6 +5,7 @@ void UI::initVariables()
 	this->unitSize = 16;
 	this->arrowTimerMax = 35;
 	this->arrowTimer = arrowTimerMax;
+	this->expIncrease = 8; // when you divide screen width(800) / 100(maxExp you can gain at first lvl) you got 8
 }
 
 void UI::initTextures()
@@ -23,14 +24,6 @@ void UI::initTextures()
 void UI::initSprites()
 {
 	/*=================		MAIN VIEW	===================*/
-	//Set LVL font and properties
-	this->lvl.setFont(font);
-	this->lvl.setCharacterSize(60);
-	this->lvl.setFillColor(sf::Color::White);
-	this->lvl.setOutlineColor(sf::Color::Black);
-	this->lvl.setOutlineThickness(3.f);
-	this->lvl.setString("1"); //(class)Player -> lvl; also update in update() function this->lvl.setString(player->lvl);
-	this->lvl.setPosition(730, 700);
 
 	//Set the main view screen
 	this->gameView.setTexture(this->gameTextures);
@@ -54,6 +47,8 @@ void UI::initSprites()
 	this->clover.setTexture(this->gameTextures);
 	this->key.setTexture(this->gameTextures);
 	this->coin.setTexture(this->gameTextures);
+	this->door.setTexture(this->gameTextures);
+	this->skillPoints.setTexture(this->gameTextures);
 
 
 	/*=================		GRAPHICAL USER INTERFACE	===================*/
@@ -68,12 +63,12 @@ void UI::initSprites()
 	this->arrowsSrc = sf::IntRect(0, 0, this->unitSize, this->unitSize);
 	this->arrowR.setTextureRect(arrowsSrc);
 	this->arrowR.setScale(5.f, 5.f);
-	this->arrowR.setPosition(sf::Vector2f(25 * this->unitSize, 25 * this->unitSize));
+	this->arrowR.setPosition(sf::Vector2f(25 * this->unitSize, 18 * this->unitSize));
 
 	this->arrowLSrc = sf::IntRect(0, 0, this->unitSize, this->unitSize);
 	this->arrowL.setTextureRect(arrowLSrc);
 	this->arrowL.setScale(-5.f, 5.f);
-	this->arrowL.setPosition(sf::Vector2f(24 * this->unitSize, 25 * this->unitSize));
+	this->arrowL.setPosition(sf::Vector2f(24 * this->unitSize, 18 * this->unitSize));
 
 	//Upgrade mark
 	this->upgradeSrc = sf::IntRect(this->unitSize, 0, this->unitSize, this->unitSize);
@@ -96,8 +91,8 @@ void UI::initSprites()
 	//Heart
 	this->heartSrc = sf::IntRect(4 * this->unitSize, 0, this->unitSize, this->unitSize);
 	this->heart.setTextureRect(heartSrc);
-	this->heart.setScale(7.f, 7.f);
-	this->heart.setPosition(sf::Vector2f(20 * this->unitSize, 20 * this->unitSize));
+	this->heart.setScale(5.f, 5.f);
+	this->heart.setPosition(sf::Vector2f(12.8 * this->unitSize, 23.5 * this->unitSize));
 
 	//Fist
 	this->fistSrc = sf::IntRect(5 * this->unitSize, 0, this->unitSize, this->unitSize);
@@ -110,6 +105,12 @@ void UI::initSprites()
 	this->clover.setTextureRect(cloverSrc);
 	this->clover.setScale(5.f, 5.f);
 	this->clover.setPosition(sf::Vector2f(1 * this->unitSize, 43 * this->unitSize));
+
+	//Skill points
+	this->skillPointsSrc = sf::IntRect(9 * this->unitSize, 0, this->unitSize, this->unitSize);
+	this->skillPoints.setTextureRect(skillPointsSrc);
+	this->skillPoints.setScale(5.f, 5.f);
+	this->skillPoints.setPosition(sf::Vector2f(25 * this->unitSize, 31 * this->unitSize));
 
 	//Coin
 	this->coinSrc = sf::IntRect(7 * this->unitSize, 0, this->unitSize, this->unitSize);
@@ -124,21 +125,84 @@ void UI::initSprites()
 	this->key.setPosition(sf::Vector2f(25 * this->unitSize, 43 * this->unitSize));
 
 	//EXP BAR
-	this->expBar.setSize(sf::Vector2f(800.f, 20.f));
-	this->expBar.setFillColor(sf::Color(155, 135, 12, 255));
+	this->expBarBg.setSize(sf::Vector2f(800.f, 20.f));
+	this->expBarBg.setFillColor(sf::Color(155, 135, 12, 255));
+	this->expBarBg.setPosition(sf::Vector2f(0, 780));
+
+	this->expBar.setFillColor(sf::Color::Yellow);
+	this->expBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(10)) * 20.f, 20.f));
 	this->expBar.setPosition(sf::Vector2f(0, 780));
+
+	//Door counter
+	this->doorSrc = sf::IntRect(10 * this->unitSize, 0, this->unitSize, this->unitSize);
+	this->door.setTextureRect(doorSrc);
+	this->door.setScale(4.f, 4.f);
+	this->door.setPosition(sf::Vector2f(0 * this->unitSize, 25 * this->unitSize));
+	
+	//Hp Bar
+	this->hpBarBg.setSize(sf::Vector2f(400.f, 40.f));
+	this->hpBarBg.setFillColor(sf::Color(255, 150, 150, 255));
+	this->hpBarBg.setOutlineColor(sf::Color(255, 50, 50, 255));
+	this->hpBarBg.setOutlineThickness(3.f);
+	this->hpBarBg.setPosition(sf::Vector2f(13 * this->unitSize, 25 * this->unitSize));
+
+	this->hpBar.setSize(sf::Vector2f(400.f, 40.f));
+	this->hpBar.setFillColor(sf::Color(255, 50, 50, 255));
+	this->hpBarBg.setOutlineColor(sf::Color(255, 0, 0, 255));
+	this->hpBarBg.setOutlineThickness(6.f);
+	this->hpBar.setPosition(sf::Vector2f(13 * this->unitSize, 25 * this->unitSize));
+
+}
+
+void UI::initText()
+{
+	//Set LVL font and properties
+	this->lvlTxt.setFont(font);
+	this->lvlTxt.setCharacterSize(40);
+	this->lvlTxt.setFillColor(sf::Color::White);
+	this->lvlTxt.setOutlineColor(sf::Color::Black);
+	this->lvlTxt.setOutlineThickness(3.f);
+	this->lvlTxt.setPosition(680, 735);
+
+	this->fistTxt = lvlTxt;
+	this->fistTxt.setCharacterSize(60);
+	this->fistTxt.setPosition(sf::Vector2f(7 * this->unitSize, 31 * this->unitSize));
+
+	this->shieldTxt = fistTxt;
+	this->shieldTxt.setPosition(sf::Vector2f(7 * this->unitSize, 37 * this->unitSize));
+
+	this->cloverTxt = fistTxt;
+	this->cloverTxt.setPosition(sf::Vector2f(7 * this->unitSize, 43 * this->unitSize));
+
+	this->skillPointsTxt = fistTxt;
+	this->skillPointsTxt.setPosition(sf::Vector2f(31 * this->unitSize, 31 * this->unitSize));
+
+	this->coinTxt = fistTxt;
+	this->coinTxt.setPosition(sf::Vector2f(31 * this->unitSize, 37 * this->unitSize));
+
+	this->keyTxt = fistTxt;
+	this->keyTxt.setPosition(sf::Vector2f(31 * this->unitSize, 43 * this->unitSize));
+
+	this->doorTxt = fistTxt;
+	this->doorTxt.setCharacterSize(40);
+	this->doorTxt.setPosition(sf::Vector2f(4 * this->unitSize, 26 * this->unitSize));
 }
 
 UI::UI()
 {
+	this->player = new Player;
+
 	this->initVariables();
 	this->initTextures();
 	this->initSprites();
+	this->initText();
 	this->update();
+	this->updateText();
 }
 
 UI::~UI()
 {
+	delete this->player;
 }
 
 void UI::input()
@@ -146,7 +210,7 @@ void UI::input()
 	//Arrow right
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && arrowTimer >= arrowTimerMax)
 	{
-		std::cout << "ee";
+		std::cout << "prawo";
 		this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize);
 		this->arrowR.setTextureRect(arrowsSrc);
 		arrowTimer = 0;
@@ -154,49 +218,130 @@ void UI::input()
 	//Arrow left
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && arrowTimer >= arrowTimerMax)
 	{
-		std::cout << "ee";
+		std::cout << "lewo";
 		this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize);
 		this->arrowL.setScale(-5.f, 5.f);
 		this->arrowL.setTextureRect(arrowsSrc);
 		arrowTimer = 0;
 	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L) && arrowTimer >= arrowTimerMax)
+	{
+		std::cout << "exp + 10";
+		this->player->setProperties(10, rand()%25 + 5); //(10,10)
+		std::cout << "Exp: " << this->player->getProperties(10);
+
+		if (this->player->getProperties(10) >= this->player->getProperties(11))
+		{
+			this->expBar.setSize(sf::Vector2f(0.f, 20.f));
+			this->expIncrease = 800 / this->player->getProperties(11);
+		}			
+		else
+			this->expBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(10) * this->expIncrease), 20.f));
+		arrowTimer = 0;
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K) && arrowTimer >= arrowTimerMax)
+	{
+		std::cout << " ";
+		this->player->setProperties(1, -1);
+		arrowTimer = 0;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && this->player->getProperties(6) >= 1 && arrowTimer >= arrowTimerMax)
+	{
+		this->player->setProperties(6, -1);
+		this->player->setProperties(1, 1);
+		arrowTimer = 0;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::M) && arrowTimer >= arrowTimerMax)
+	{
+		this->player->setProperties(4, -1000);
+		this->hpBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(4) * 0.4), 40.f)); // 0.4 -> hbbarwidth/hpMax 400/1000 = 0.4 
+		std::cout << "Hp: " << this->player->getProperties(4) << "\n";
+		arrowTimer = 0;
+	}
+}
+
+bool UI::isDead()
+{
+	return this->player->isDead();
 }
 
 void UI::update()
 {
-	if (arrowTimer < arrowTimerMax) //Incement timer 
+	if (this->arrowTimer < this->arrowTimerMax) //Incement timer 
 	{
 		arrowTimer++;
 	}
-	if (arrowTimer == arrowTimerMax) //Back to unactive arrows sprite
+	if (this->arrowTimer == this->arrowTimerMax) //Back to unactive arrows sprite
 	{
 		this->arrowsSrc = sf::IntRect(0, 0, this->unitSize, this->unitSize);
 		this->arrowR.setTextureRect(arrowsSrc);
 		this->arrowL.setTextureRect(arrowsSrc);
 	}
-		
+
+	
+
+	this->updateText();
+	this->player->levelUp();
+	this->player->isDead();
 
 	this->input();
 }
 
-void UI::renderGV(sf::RenderTarget& target)
+void UI::updateText()
+{
+	this->fistTxt.setString(std::to_string(player->getProperties(1)));
+	this->shieldTxt.setString(std::to_string(player->getProperties(2)));
+	this->cloverTxt.setString(std::to_string(player->getProperties(3)));
+	this->skillPointsTxt.setString(std::to_string(player->getProperties(6)));
+	this->coinTxt.setString(std::to_string(player->getProperties(8)));
+	this->keyTxt.setString(std::to_string(player->getProperties(7)));
+	this->lvlTxt.setString("Lvl: " + std::to_string(player->getProperties(9)));
+	this->doorTxt.setString(std::to_string(player->getProperties(12)));
+}
+
+void UI::renderGV(sf::RenderTarget& target) //Game view
 {
 	target.draw(this->gameView);
 }
 
-void UI::renderGUI(sf::RenderTarget& target)
+void UI::renderGUI(sf::RenderTarget& target) // Graphical User Interface
 {
 	target.draw(this->gui);
 	target.draw(this->arrowR);
 	target.draw(this->arrowL);
 	target.draw(this->upgrade);
 	target.draw(this->sword);
-	target.draw(this->shield);
-	target.draw(this->heart);
+	target.draw(this->shield);	
 	target.draw(this->fist);
 	target.draw(this->clover);
+	target.draw(this->skillPoints);
 	target.draw(this->coin);
 	target.draw(this->key);
-	target.draw(this->expBar);
-	target.draw(this->lvl);
+	target.draw(this->expBarBg);	
+	target.draw(this->expBar);	
+	target.draw(this->door);	
+	target.draw(this->hpBarBg);	
+	target.draw(this->hpBar);	
+	target.draw(this->heart);
+}
+
+void UI::renderText(sf::RenderTarget& target)
+{
+	target.draw(this->fistTxt);
+	target.draw(this->shieldTxt);
+	target.draw(this->cloverTxt);
+	target.draw(this->skillPointsTxt);
+	target.draw(this->coinTxt);
+	target.draw(this->keyTxt);
+	target.draw(this->lvlTxt);
+	target.draw(this->doorTxt);
+}
+
+void UI::render(sf::RenderTarget& target)
+{
+	this->renderGV(target);
+	this->renderGUI(target);
+	this->renderText(target);
 }
