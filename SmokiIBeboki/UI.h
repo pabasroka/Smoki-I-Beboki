@@ -11,6 +11,8 @@ private:
 	int unitSize;
 	int arrowTimerMax;
 	int arrowTimer;
+	int inputTimer;
+	int inputTimerMax;
 	int test;
 	float expIncrease;
 
@@ -51,6 +53,8 @@ private:
 	sf::Sprite shield;
 	sf::IntRect shieldSrc;
 	sf::Text shieldTxt;
+	sf::Sprite upgradeShield;
+	sf::IntRect upgradeShieldSrc;
 
 	sf::Sprite heart;
 	sf::IntRect heartSrc;
@@ -59,10 +63,14 @@ private:
 	sf::Sprite fist;
 	sf::IntRect fistSrc;
 	sf::Text fistTxt;
+	sf::Sprite upgradeFist;
+	sf::IntRect upgradeFistSrc;
 
 	sf::Sprite clover;
 	sf::IntRect cloverSrc;
 	sf::Text cloverTxt;
+	sf::Sprite upgradeClover;
+	sf::IntRect upgradeCloverSrc;
 
 	sf::Sprite coin;
 	sf::IntRect coinSrc;

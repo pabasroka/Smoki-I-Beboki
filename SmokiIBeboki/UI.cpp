@@ -4,7 +4,9 @@ void UI::initVariables()
 {
 	this->unitSize = 16;
 	this->arrowTimerMax = 35;
-	this->arrowTimer = arrowTimerMax;
+	this->arrowTimer = this->arrowTimerMax;
+	this->inputTimerMax = 25;
+	this->inputTimer = this->inputTimerMax;
 	this->expIncrease = 8; // when you divide screen width(800) / 100(maxExp you can gain at first lvl) you got 8
 }
 
@@ -29,7 +31,7 @@ void UI::initSprites()
 	this->gameView.setTexture(this->gameTextures);
 
 	//Set the properties
-	this->gameViewSrc = sf::IntRect(0, 11 * this->unitSize, 800, 30 * this->unitSize);
+	this->gameViewSrc = sf::IntRect(0, 17 * this->unitSize, 800, 30 * this->unitSize);
 	this->gameView.setTextureRect(gameViewSrc);
 	this->gameView.setScale(1.f, 1.f);
 
@@ -42,9 +44,12 @@ void UI::initSprites()
 	this->upgrade.setTexture(this->gameTextures);
 	this->sword.setTexture(this->gameTextures);
 	this->shield.setTexture(this->gameTextures);
+	this->upgradeShield.setTexture(this->gameTextures);
 	this->heart.setTexture(this->gameTextures);
 	this->fist.setTexture(this->gameTextures);
+	this->upgradeFist.setTexture(this->gameTextures);
 	this->clover.setTexture(this->gameTextures);
+	this->upgradeClover.setTexture(this->gameTextures);
 	this->key.setTexture(this->gameTextures);
 	this->coin.setTexture(this->gameTextures);
 	this->door.setTexture(this->gameTextures);
@@ -54,7 +59,7 @@ void UI::initSprites()
 	/*=================		GRAPHICAL USER INTERFACE	===================*/
 
 	//Set the properties
-	this->guiSrc = sf::IntRect(0, 41 * this->unitSize, 800, 20 * this->unitSize);
+	this->guiSrc = sf::IntRect(0, 48 * this->unitSize, 800, 20 * this->unitSize);
 	this->gui.setTextureRect(guiSrc);
 	this->gui.setPosition(sf::Vector2f(0, 30.f * this->unitSize));
 	this->gui.setScale(1.f, 1.f);
@@ -88,6 +93,11 @@ void UI::initSprites()
 	this->shield.setScale(5.f, 5.f);
 	this->shield.setPosition(sf::Vector2f(1 * this->unitSize, 37 * this->unitSize));
 
+	this->upgradeShieldSrc = sf::IntRect(3 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
+	this->upgradeShield.setTextureRect(upgradeShieldSrc);
+	this->upgradeShield.setScale(5.f, 5.f);
+	this->upgradeShield.setPosition(sf::Vector2f(13 * this->unitSize, 37 * this->unitSize));
+
 	//Heart
 	this->heartSrc = sf::IntRect(4 * this->unitSize, 0, this->unitSize, this->unitSize);
 	this->heart.setTextureRect(heartSrc);
@@ -100,11 +110,21 @@ void UI::initSprites()
 	this->fist.setScale(5.f, 5.f);
 	this->fist.setPosition(sf::Vector2f(1 * this->unitSize, 31 * this->unitSize));
 
+	this->upgradeFistSrc = sf::IntRect(5 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
+	this->upgradeFist.setTextureRect(upgradeFistSrc);
+	this->upgradeFist.setScale(5.f, 5.f);
+	this->upgradeFist.setPosition(sf::Vector2f(13 * this->unitSize, 31 * this->unitSize));
+
 	//Clover
 	this->cloverSrc = sf::IntRect(6 * this->unitSize, 0, this->unitSize, this->unitSize);
 	this->clover.setTextureRect(cloverSrc);
 	this->clover.setScale(5.f, 5.f);
 	this->clover.setPosition(sf::Vector2f(1 * this->unitSize, 43 * this->unitSize));
+
+	this->upgradeCloverSrc = sf::IntRect(6 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
+	this->upgradeClover.setTextureRect(upgradeCloverSrc);
+	this->upgradeClover.setScale(5.f, 5.f);
+	this->upgradeClover.setPosition(sf::Vector2f(13 * this->unitSize, 43 * this->unitSize));
 
 	//Skill points
 	this->skillPointsSrc = sf::IntRect(9 * this->unitSize, 0, this->unitSize, this->unitSize);
@@ -224,42 +244,63 @@ void UI::input()
 		this->arrowL.setTextureRect(arrowsSrc);
 		arrowTimer = 0;
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && this->player->getProperties(6) >= 1 && inputTimer >= inputTimerMax)
+	{
+		this->player->setProperties(6, -1);
+		this->player->setProperties(2, 1);
+		inputTimer = 0;
+		this->upgradeShieldSrc = sf::IntRect(3 * this->unitSize, 2 * this->unitSize, this->unitSize, this->unitSize);
+		this->upgradeShield.setTextureRect(upgradeShieldSrc);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && this->player->getProperties(6) >= 1 && inputTimer >= inputTimerMax)
+	{
+		this->player->setProperties(6, -1);
+		this->player->setProperties(1, 1);
+		inputTimer = 0;
+		this->upgradeFistSrc = sf::IntRect(5 * this->unitSize, 2 * this->unitSize, this->unitSize, this->unitSize);
+		this->upgradeFist.setTextureRect(upgradeFistSrc);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && this->player->getProperties(6) >= 1 && inputTimer >= inputTimerMax)
+	{
+		this->player->setProperties(6, -1);
+		this->player->setProperties(3, 1);
+		inputTimer = 0;
+		this->upgradeCloverSrc = sf::IntRect(6 * this->unitSize, 2 * this->unitSize, this->unitSize, this->unitSize);
+		this->upgradeClover.setTextureRect(upgradeCloverSrc);
+	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L) && arrowTimer >= arrowTimerMax)
+	/* ==================================== dev tools ==================================== */
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
+	{
+		this->player->setProperties(4, -1000);
+		this->hpBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(4) * 0.4), 40.f)); // 0.4 -> hbbarwidth/hpMax 400/1000 = 0.4 
+		std::cout << "Hp: " << this->player->getProperties(4) << "\n";
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
 	{
 		std::cout << "exp + 10";
-		this->player->setProperties(10, rand()%25 + 5); //(10,10)
+		this->player->setProperties(10, rand() % 25 + 5); //(10,10)
 		std::cout << "Exp: " << this->player->getProperties(10);
 
 		if (this->player->getProperties(10) >= this->player->getProperties(11))
 		{
 			this->expBar.setSize(sf::Vector2f(0.f, 20.f));
 			this->expIncrease = 800 / this->player->getProperties(11);
-		}			
+		}
 		else
 			this->expBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(10) * this->expIncrease), 20.f));
-		arrowTimer = 0;
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K) && arrowTimer >= arrowTimerMax)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
 	{
-		std::cout << " ";
 		this->player->setProperties(1, -1);
-		arrowTimer = 0;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && this->player->getProperties(6) >= 1 && arrowTimer >= arrowTimerMax)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
 	{
-		this->player->setProperties(6, -1);
-		this->player->setProperties(1, 1);
-		arrowTimer = 0;
+		this->player->setProperties(6, 10);
+		this->player->setProperties(9, 50);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::M) && arrowTimer >= arrowTimerMax)
-	{
-		this->player->setProperties(4, -1000);
-		this->hpBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(4) * 0.4), 40.f)); // 0.4 -> hbbarwidth/hpMax 400/1000 = 0.4 
-		std::cout << "Hp: " << this->player->getProperties(4) << "\n";
-		arrowTimer = 0;
-	}
+
 }
 
 bool UI::isDead()
@@ -273,11 +314,24 @@ void UI::update()
 	{
 		arrowTimer++;
 	}
+	if (this->inputTimer < this->inputTimerMax) //Incement timer 
+	{
+		inputTimer++;
+	}
 	if (this->arrowTimer == this->arrowTimerMax) //Back to unactive arrows sprite
 	{
 		this->arrowsSrc = sf::IntRect(0, 0, this->unitSize, this->unitSize);
 		this->arrowR.setTextureRect(arrowsSrc);
 		this->arrowL.setTextureRect(arrowsSrc);
+	}
+	if (this->inputTimer == this->inputTimerMax) //Back to unactive upgrade sprites
+	{
+		this->upgradeShieldSrc = sf::IntRect(3 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
+		this->upgradeShield.setTextureRect(upgradeShieldSrc);
+		this->upgradeFistSrc = sf::IntRect(5 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
+		this->upgradeFist.setTextureRect(upgradeFistSrc);
+		this->upgradeCloverSrc = sf::IntRect(6 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
+		this->upgradeClover.setTextureRect(upgradeCloverSrc);
 	}
 
 	
@@ -311,11 +365,14 @@ void UI::renderGUI(sf::RenderTarget& target) // Graphical User Interface
 	target.draw(this->gui);
 	target.draw(this->arrowR);
 	target.draw(this->arrowL);
-	target.draw(this->upgrade);
+	//target.draw(this->upgrade);
 	target.draw(this->sword);
 	target.draw(this->shield);	
+	target.draw(this->upgradeShield);
 	target.draw(this->fist);
+	target.draw(this->upgradeFist);
 	target.draw(this->clover);
+	target.draw(this->upgradeClover);
 	target.draw(this->skillPoints);
 	target.draw(this->coin);
 	target.draw(this->key);

@@ -7,11 +7,11 @@ void Player::initVariables()
 	this->hpMax = 1000;
 	this->hp = this->hpMax;
 	this->luck = 5;
-	this->skillPoints = 0;
-	this->keys = 0;
-	this->coins = 0;
+	this->skillPoints = 10; //0
+	this->keys = 10; //0
+	this->coins = 10; //0
 	this->lvl = 1;
-	this->expMax = 100;
+	this->expMax = 100; //every level increased by 10
 	this->exp = 0;
 	this->doorCounter = 0;
 }
