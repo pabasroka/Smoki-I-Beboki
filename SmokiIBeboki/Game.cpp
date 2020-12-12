@@ -18,15 +18,15 @@ void Game::initGameOverText()
 	this->gameOver.setOutlineColor(sf::Color::Black);
 	this->gameOver.setOutlineThickness(3.f);
 	this->gameOver.setPosition(120, 200);
-	this->gameOver.setString("GAME OVER !");
+	this->gameOver.setString("KONIEC GRY !");
 
 	this->resetTxt.setFont(font);
-	this->resetTxt.setCharacterSize(90);
+	this->resetTxt.setCharacterSize(50);
 	this->resetTxt.setFillColor(sf::Color::White);
 	this->resetTxt.setOutlineColor(sf::Color::Black);
 	this->resetTxt.setOutlineThickness(3.f);
 	this->resetTxt.setPosition(20, 350);
-	this->resetTxt.setString("PRESS 'R' TO RESET GAME !");
+	this->resetTxt.setString("WCISNIJ 'R' ABY ZRESTARTOWAC !");
 
 }
 
@@ -103,7 +103,7 @@ void Game::render()
 	if (this->endGame)
 	{
 		this->window->clear(sf::Color::Black);
-		std::cout << "Game over! \n";
+		std::cout << "KONIEC GRY ! \n";
 
 		this->window->draw(gameOver);
 		this->window->draw(resetTxt);

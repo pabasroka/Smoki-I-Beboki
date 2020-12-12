@@ -2,6 +2,7 @@
 #include<SFML/Graphics.hpp>
 #include<iostream>
 #include"Player.h"
+#include"Room.h"
 
 class UI
 {
@@ -17,11 +18,6 @@ private:
 	float expIncrease;
 
 	sf::Font font;
-
-	//Example sprites
-	sf::Texture texture; //some example texture in the future it will be seperate variables
-	sf::Sprite sprite;
-	sf::IntRect spriteSrc; 
 
 	//Dynamic sprites
 	sf::Texture gameTextures;
@@ -95,10 +91,26 @@ private:
 	sf::RectangleShape hpBarBg;
 	sf::RectangleShape hpBar;
 
+
+	/*======	ROOM	====*/
+	Room* roomA;
+	Room* roomB;
+	//int typeA;
+	//int typeB;
+
+	//sf::Vector2f setAPos;
+	//sf::Vector2f setBPos;
+
+	bool isInsideRoom;
+
 	void initVariables();
 	void initTextures();
 	void initSprites();
 	void initText();
+
+	//Rooms functions
+	void initRooms();
+	void deleteRooms();
 public:
 	//Constructor and Destructor
 	UI();
@@ -113,9 +125,11 @@ public:
 	void update();
 	void updateText();
 	
+	
 	void renderGV(sf::RenderTarget& target); // I use & to get simple access to Game.cpp
 	void renderGUI(sf::RenderTarget& target); 
 	void renderText(sf::RenderTarget& target);
+	void renderRoom(sf::RenderTarget& target);
 	void render(sf::RenderTarget& target);
 };
 

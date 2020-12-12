@@ -8,14 +8,12 @@ void UI::initVariables()
 	this->inputTimerMax = 25;
 	this->inputTimer = this->inputTimerMax;
 	this->expIncrease = 8; // when you divide screen width(800) / 100(maxExp you can gain at first lvl) you got 8
+	this->isInsideRoom = false;
 }
 
 void UI::initTextures()
 {
 	//Load textures from file
-	if (!this->texture.loadFromFile("Textures/rpgSprites.png"))
-		std::cout << "Could not load rpgSprites.png file \n";
-
 	if (!this->gameTextures.loadFromFile("Textures/rpgSprites2.png"))
 		std::cout << "Could not load rpgSprites2.png file \n";
 	
@@ -32,7 +30,7 @@ void UI::initSprites()
 
 	//Set the properties
 	this->gameViewSrc = sf::IntRect(0, 17 * this->unitSize, 800, 30 * this->unitSize);
-	this->gameView.setTextureRect(gameViewSrc);
+	this->gameView.setTextureRect(this->gameViewSrc);
 	this->gameView.setScale(1.f, 1.f);
 
 	//Set the main view screen
@@ -172,6 +170,8 @@ void UI::initSprites()
 	this->hpBarBg.setOutlineThickness(6.f);
 	this->hpBar.setPosition(sf::Vector2f(13 * this->unitSize, 25 * this->unitSize));
 
+	this->roomA = new Room;
+	this->roomB = new Room;
 }
 
 void UI::initText()
@@ -208,16 +208,35 @@ void UI::initText()
 	this->doorTxt.setPosition(sf::Vector2f(4 * this->unitSize, 26 * this->unitSize));
 }
 
+void UI::initRooms()
+{
+	this->deleteRooms();
+	this->roomA = new Room; //Room(this->player->level, this->player->dmg, ->hp, ->luck);
+	this->roomB = new Room;
+
+	this->roomA->setPosition(sf::Vector2f(7 * this->unitSize, 5 * this->unitSize));
+	this->roomB->setPosition(sf::Vector2f(33 * this->unitSize, 5 * this->unitSize));
+}
+
+void UI::deleteRooms()
+{
+	delete this->roomA;
+	delete this->roomB;
+}
+
 UI::UI()
 {
 	this->player = new Player;
 
+	//Interface and basic game mechanics fuctions
 	this->initVariables();
 	this->initTextures();
 	this->initSprites();
 	this->initText();
 	this->update();
 	this->updateText();
+
+	this->initRooms();
 }
 
 UI::~UI()
@@ -234,6 +253,7 @@ void UI::input()
 		this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize);
 		this->arrowR.setTextureRect(arrowsSrc);
 		arrowTimer = 0;
+		this->roomA->update(*this->player);
 	}
 	//Arrow left
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && arrowTimer >= arrowTimerMax)
@@ -243,6 +263,7 @@ void UI::input()
 		this->arrowL.setScale(-5.f, 5.f);
 		this->arrowL.setTextureRect(arrowsSrc);
 		arrowTimer = 0;
+		this->roomA->update(*this->player);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && this->player->getProperties(6) >= 1 && inputTimer >= inputTimerMax)
 	{
@@ -299,6 +320,11 @@ void UI::input()
 	{
 		this->player->setProperties(6, 10);
 		this->player->setProperties(9, 50);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
+	{
+		this->initRooms();
+		this->roomA->update(*this->player);
 	}
 
 }
@@ -396,9 +422,21 @@ void UI::renderText(sf::RenderTarget& target)
 	target.draw(this->doorTxt);
 }
 
+void UI::renderRoom(sf::RenderTarget& target)
+{
+	//Render two random generated rooms
+	target.draw(this->roomA->getSprite());
+	target.draw(this->roomB->getSprite());
+
+	//Shows message about perks you get
+	target.draw(this->roomA->displayText());
+	target.draw(this->roomB->displayText());
+}
+
 void UI::render(sf::RenderTarget& target)
 {
 	this->renderGV(target);
 	this->renderGUI(target);
 	this->renderText(target);
+	this->renderRoom(target);
 }
