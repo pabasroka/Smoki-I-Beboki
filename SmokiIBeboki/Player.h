@@ -29,11 +29,9 @@ public:
 
 	//Setters
 	void setProperties(int type, int value = 0);
-	//int setProperties(int type);
 
 	//Functions
 	void levelUp();
-	void upgradeDmg();
 	const bool isDead() const;
 
 	void update();

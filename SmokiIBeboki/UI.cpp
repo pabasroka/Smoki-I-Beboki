@@ -37,8 +37,12 @@ void UI::initSprites()
 	this->gui.setTexture(this->gameTextures);
 	this->arrowR.setTexture(this->gameTextures);
 	this->arrowL.setTexture(this->gameTextures);
+	this->arrowU.setTexture(this->gameTextures);
+	this->arrowD.setTexture(this->gameTextures);
 	this->arrowRAction.setTexture(this->gameTextures);
 	this->arrowLAction.setTexture(this->gameTextures);
+	this->arrowUAction.setTexture(this->gameTextures);
+	this->arrowDAction.setTexture(this->gameTextures);
 	this->upgrade.setTexture(this->gameTextures);
 	this->sword.setTexture(this->gameTextures);
 	this->shield.setTexture(this->gameTextures);
@@ -52,6 +56,7 @@ void UI::initSprites()
 	this->coin.setTexture(this->gameTextures);
 	this->door.setTexture(this->gameTextures);
 	this->skillPoints.setTexture(this->gameTextures);
+	this->insideObject.setTexture(this->gameTextures);
 
 
 	/*=================		GRAPHICAL USER INTERFACE	===================*/
@@ -72,6 +77,18 @@ void UI::initSprites()
 	this->arrowL.setTextureRect(arrowLSrc);
 	this->arrowL.setScale(-5.f, 5.f);
 	this->arrowL.setPosition(sf::Vector2f(24 * this->unitSize, 18 * this->unitSize));
+
+	this->arrowUSrc = sf::IntRect(0, 0, this->unitSize, this->unitSize);
+	this->arrowU.setTextureRect(arrowUSrc);
+	this->arrowU.setScale(5.f, 5.f);
+	this->arrowU.rotate(-90.f);
+	this->arrowU.setPosition(sf::Vector2f(35 * this->unitSize, 10 * this->unitSize));
+
+	this->arrowDSrc = sf::IntRect(0, 0, this->unitSize, this->unitSize);
+	this->arrowD.setTextureRect(arrowDSrc);
+	this->arrowD.setScale(5.f, 5.f);
+	this->arrowD.rotate(90.f);
+	this->arrowD.setPosition(sf::Vector2f(40 * this->unitSize, 13 * this->unitSize));
 
 	//Upgrade mark
 	this->upgradeSrc = sf::IntRect(this->unitSize, 0, this->unitSize, this->unitSize);
@@ -170,8 +187,16 @@ void UI::initSprites()
 	this->hpBarBg.setOutlineThickness(6.f);
 	this->hpBar.setPosition(sf::Vector2f(13 * this->unitSize, 25 * this->unitSize));
 
+	//Inside object
+	this->insideObjectSrc = sf::IntRect(51 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+	this->insideObject.setTextureRect(this->insideObjectSrc);
+	this->insideObject.setPosition(350.f, 150.f);
+	this->insideObject.setScale(5.f, 5.f);
+
 	this->roomA = new Room;
 	this->roomB = new Room;
+	this->selectedRoom = 0;
+	this->selectedRoomR = this->roomA;
 }
 
 void UI::initText()
@@ -184,28 +209,33 @@ void UI::initText()
 	this->lvlTxt.setOutlineThickness(3.f);
 	this->lvlTxt.setPosition(680, 735);
 
-	this->fistTxt = lvlTxt;
+	this->fistTxt = this->lvlTxt;
 	this->fistTxt.setCharacterSize(60);
 	this->fistTxt.setPosition(sf::Vector2f(7 * this->unitSize, 31 * this->unitSize));
 
-	this->shieldTxt = fistTxt;
+	this->shieldTxt = this->fistTxt;
 	this->shieldTxt.setPosition(sf::Vector2f(7 * this->unitSize, 37 * this->unitSize));
 
-	this->cloverTxt = fistTxt;
+	this->cloverTxt = this->fistTxt;
 	this->cloverTxt.setPosition(sf::Vector2f(7 * this->unitSize, 43 * this->unitSize));
 
-	this->skillPointsTxt = fistTxt;
+	this->skillPointsTxt = this->fistTxt;
 	this->skillPointsTxt.setPosition(sf::Vector2f(31 * this->unitSize, 31 * this->unitSize));
 
-	this->coinTxt = fistTxt;
+	this->coinTxt = this->fistTxt;
 	this->coinTxt.setPosition(sf::Vector2f(31 * this->unitSize, 37 * this->unitSize));
 
-	this->keyTxt = fistTxt;
+	this->keyTxt = this->fistTxt;
 	this->keyTxt.setPosition(sf::Vector2f(31 * this->unitSize, 43 * this->unitSize));
 
-	this->doorTxt = fistTxt;
+	this->doorTxt = this->fistTxt;
 	this->doorTxt.setCharacterSize(40);
 	this->doorTxt.setPosition(sf::Vector2f(4 * this->unitSize, 26 * this->unitSize));
+
+	this->hpTxt = this->fistTxt;
+	this->doorTxt.setCharacterSize(40);
+	this->hpTxt.setFillColor(sf::Color(237, 100, 94));
+	this->hpTxt.setPosition(sf::Vector2f(23 * this->unitSize, 24 * this->unitSize));
 }
 
 void UI::initRooms()
@@ -213,6 +243,8 @@ void UI::initRooms()
 	this->deleteRooms();
 	this->roomA = new Room; //Room(this->player->level, this->player->dmg, ->hp, ->luck);
 	this->roomB = new Room;
+	if (this->roomB->getRoomType() == 1 && this->roomA->getRoomType() == 1) //there could be only one room with treasue to choose
+		this->initRooms();
 
 	this->roomA->setPosition(sf::Vector2f(7 * this->unitSize, 5 * this->unitSize));
 	this->roomB->setPosition(sf::Vector2f(33 * this->unitSize, 5 * this->unitSize));
@@ -246,25 +278,92 @@ UI::~UI()
 
 void UI::input()
 {
-	//Arrow right
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && arrowTimer >= arrowTimerMax)
+	//CHOICE ROOM 
+	if (this->isInsideRoom == false)
 	{
-		std::cout << "prawo";
-		this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize);
-		this->arrowR.setTextureRect(arrowsSrc);
-		arrowTimer = 0;
-		this->roomA->update(*this->player);
+		//Arrow right && ROOM B
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && arrowTimer >= arrowTimerMax)
+		{
+			std::cout << "prawo";
+			this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize); //set default
+			this->arrowR.setTextureRect(arrowsSrc);
+			arrowTimer = 0;
+			if (this->roomB->getRoomType() == 1) //if treasure room, you must have key to open door
+			{
+				if (player->getProperties(7) >= 1)
+				{
+					player->setProperties(7, -1);
+					this->updateInsideRoom(this->roomB->getRoomType());
+					this->selectedRoom = this->roomB->getRoomType();
+					this->selectedRoomR = this->roomB;
+					this->isInsideRoom = true;
+				}
+			}
+			else
+			{
+				this->updateInsideRoom(this->roomB->getRoomType());
+				this->selectedRoom = this->roomB->getRoomType();
+				this->selectedRoomR = this->roomB;
+				this->isInsideRoom = true;
+			}
+		}
+		//Arrow left && ROOM A
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && arrowTimer >= arrowTimerMax)
+		{
+			std::cout << "lewo";
+			this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize); //set default
+			this->arrowL.setScale(-5.f, 5.f);
+			this->arrowL.setTextureRect(arrowsSrc);
+			arrowTimer = 0;
+			if (this->roomA->getRoomType() == 1) //if treasure room, you must have key to open door
+			{
+				if (player->getProperties(7) >= 1)
+				{
+					player->setProperties(7, -1);
+					this->updateInsideRoom(this->roomA->getRoomType());
+					this->selectedRoom = this->roomA->getRoomType();
+					this->selectedRoomR = this->roomA;
+					this->isInsideRoom = true;
+				}
+			}
+			else
+			{
+				this->updateInsideRoom(this->roomA->getRoomType());
+				this->selectedRoom = this->roomA->getRoomType();
+				this->selectedRoomR = this->roomA;
+				this->isInsideRoom = true;
+			}
+		}
 	}
-	//Arrow left
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && arrowTimer >= arrowTimerMax)
+	else
 	{
-		std::cout << "lewo";
-		this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize);
-		this->arrowL.setScale(-5.f, 5.f);
-		this->arrowL.setTextureRect(arrowsSrc);
-		arrowTimer = 0;
-		this->roomA->update(*this->player);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && arrowTimer >= arrowTimerMax)
+		{
+			std::cout << "gora";
+			this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize);
+			this->arrowU.setTextureRect(arrowsSrc);
+			arrowTimer = 0;
+			this->isInsideRoom = false;
+
+			//setPlayerPropertiesRoom(this->selectedRoom, *this->player);
+			this->selectedRoomR->update(this->selectedRoom, *this->player);
+			this->initRooms();
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && arrowTimer >= arrowTimerMax)
+		{
+			std::cout << "dol";
+			this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize);
+			this->arrowD.setTextureRect(arrowsSrc);
+			arrowTimer = 0;
+			this->isInsideRoom = false;
+
+			//setPlayerPropertiesRoom(this->selectedRoom, *this->player);
+			this->selectedRoomR->update(this->selectedRoom, *this->player);
+			this->initRooms();
+		}
 	}
+	
+	//INTERACTION IN BOTH OF STATES
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && this->player->getProperties(6) >= 1 && inputTimer >= inputTimerMax)
 	{
 		this->player->setProperties(6, -1);
@@ -311,7 +410,6 @@ void UI::input()
 		else
 			this->expBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(10) * this->expIncrease), 20.f));
 	}
-
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
 	{
 		this->player->setProperties(1, -1);
@@ -324,7 +422,8 @@ void UI::input()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 	{
 		this->initRooms();
-		this->roomA->update(*this->player);
+		//this->roomA->update(*this->player);
+		//this->isInsideRoom = true;
 	}
 
 }
@@ -349,6 +448,8 @@ void UI::update()
 		this->arrowsSrc = sf::IntRect(0, 0, this->unitSize, this->unitSize);
 		this->arrowR.setTextureRect(arrowsSrc);
 		this->arrowL.setTextureRect(arrowsSrc);
+		this->arrowU.setTextureRect(arrowsSrc);
+		this->arrowD.setTextureRect(arrowsSrc);
 	}
 	if (this->inputTimer == this->inputTimerMax) //Back to unactive upgrade sprites
 	{
@@ -359,8 +460,9 @@ void UI::update()
 		this->upgradeCloverSrc = sf::IntRect(6 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
 		this->upgradeClover.setTextureRect(upgradeCloverSrc);
 	}
-
-	
+	//HEALTH BAR AND EXP BAR
+	this->hpBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(4) * 0.4), 40.f));
+	this->expBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(10) * this->expIncrease), 20.f));
 
 	this->updateText();
 	this->player->levelUp();
@@ -379,20 +481,94 @@ void UI::updateText()
 	this->keyTxt.setString(std::to_string(player->getProperties(7)));
 	this->lvlTxt.setString("Lvl: " + std::to_string(player->getProperties(9)));
 	this->doorTxt.setString(std::to_string(player->getProperties(12)));
+	this->hpTxt.setString(std::to_string(player->getProperties(4)));
 }
+
+void UI::updateInsideRoom(int roomType)
+{
+	switch (roomType)
+	{
+	case 0: 
+		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 48 * this->unitSize, 0 * this->unitSize, 0 * this->unitSize);
+		break;
+	case 1:
+		this->insideObjectSrc = sf::IntRect(51 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);	
+		break;
+	case 2: 
+		//this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		randomEnemy();
+		break;
+	case 3: 
+		this->insideObjectSrc = sf::IntRect(57 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		break;
+	case 4: 
+		this->insideObjectSrc = sf::IntRect(60 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		break;
+	case 5:
+		this->insideObjectSrc = sf::IntRect(63 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);	
+		break;
+	case 6:
+		this->insideObjectSrc = sf::IntRect(66 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		break;
+	}
+	this->insideObject.setTextureRect(this->insideObjectSrc);
+}
+
+/* SAME FUNCTION BUT INSIDE ROOM CLASS
+void UI::setPlayerPropertiesRoom(int type, Player& player)
+{
+	// 1-dmg 2-armor 3-luck 4-hp 5-hpMax 6-SP 7-keys 8-coins 9-lvl 10-exp 11-expMax 12-doorCounter
+	switch (type)
+	{
+	case 0:
+		this->player->setProperties(12, 1);
+		break;
+	case 1:
+		this->player->setProperties(8, 50);
+		break;
+	case 2:
+		this->player->setProperties(4, -200);
+		break;
+	case 3:
+		this->player->setProperties(4, -100);
+	case 4:
+		this->player->setProperties(12, -1);
+		break;
+	case 5:
+		break;
+	case 6:
+		this->player->setProperties(12, -1);
+		break;
+		break;
+	}
+}*/
 
 void UI::renderGV(sf::RenderTarget& target) //Game view
 {
-	target.draw(this->gameView);
+	if (this->isInsideRoom == false)
+	{
+		this->gameViewSrc = sf::IntRect(0, 17 * this->unitSize, 800, 30 * this->unitSize);
+		this->gameView.setTextureRect(this->gameViewSrc);
+		target.draw(this->gameView);
+		target.draw(this->arrowR);
+		target.draw(this->arrowL);
+	}
+	else
+	{
+		this->gameViewSrc = sf::IntRect(50 * this->unitSize, 17 * this->unitSize, 800, 30 * this->unitSize);
+		this->gameView.setTextureRect(this->gameViewSrc);
+		target.draw(this->gameView);
+		target.draw(this->arrowU);
+		target.draw(this->arrowD);
+		target.draw(this->insideObject);
+	}
 }
 
 void UI::renderGUI(sf::RenderTarget& target) // Graphical User Interface
 {
 	target.draw(this->gui);
-	target.draw(this->arrowR);
-	target.draw(this->arrowL);
 	//target.draw(this->upgrade);
-	target.draw(this->sword);
+	//target.draw(this->sword);
 	target.draw(this->shield);	
 	target.draw(this->upgradeShield);
 	target.draw(this->fist);
@@ -420,17 +596,48 @@ void UI::renderText(sf::RenderTarget& target)
 	target.draw(this->keyTxt);
 	target.draw(this->lvlTxt);
 	target.draw(this->doorTxt);
+	target.draw(this->hpTxt);
 }
 
 void UI::renderRoom(sf::RenderTarget& target)
 {
-	//Render two random generated rooms
-	target.draw(this->roomA->getSprite());
-	target.draw(this->roomB->getSprite());
-
+	if (this->isInsideRoom == false)
+	{
+		//Render two random generated rooms
+		target.draw(this->roomA->getSprite());
+		target.draw(this->roomB->getSprite());
+	}
+	
 	//Shows message about perks you get
 	target.draw(this->roomA->displayText());
 	target.draw(this->roomB->displayText());
+}
+
+void UI::randomEnemy()
+{
+	this->randomizeEnemy = rand() % 5;
+	switch (this->randomizeEnemy)
+	{
+	case 0:
+		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		break;
+	case 1:
+		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 51 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		break;
+	case 2:
+		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 54 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		this->insideObject.setPosition(sf::Vector2f(280.f, 120.f));
+		break;
+	case 3:
+		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 57 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		this->insideObject.setPosition(sf::Vector2f(180.f, 140.f));
+		break;
+	case 4:
+		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 60 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		break;
+	}
+
+	
 }
 
 void UI::render(sf::RenderTarget& target)

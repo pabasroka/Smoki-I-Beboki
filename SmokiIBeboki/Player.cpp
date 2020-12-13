@@ -8,7 +8,7 @@ void Player::initVariables()
 	this->hp = this->hpMax;
 	this->luck = 5;
 	this->skillPoints = 10; //0
-	this->keys = 10; //0
+	this->keys = 0; //0
 	this->coins = 10; //0
 	this->lvl = 1;
 	this->expMax = 100; //every level increased by 10
@@ -127,10 +127,6 @@ void Player::levelUp()
 		this->skillPoints += 3;
 		this->expMax += 10;
 	}
-}
-
-void Player::upgradeDmg()
-{
 }
 
 const bool Player::isDead() const

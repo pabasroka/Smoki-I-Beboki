@@ -124,5 +124,4 @@ void Game::render()
 		this->window->display();
 	}
 
-
 }

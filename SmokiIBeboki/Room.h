@@ -6,7 +6,7 @@
 class Room
 {
 private:
-	enum class RoomType { Empty = 0, Treasure, Enemy, Trap, Back, Mystery };
+	enum class RoomType { Empty = 0, Treasure, Enemy, Trap, Back, Mystery, Healing };
 
 	sf::Font font;
 	sf::Text text;
@@ -30,7 +30,7 @@ public:
 	virtual ~Room();
 
 	//Getters
-	const int getRoomType(int type) const;
+	const int getRoomType() const;
 	const sf::Sprite getSprite() const;
 
 	//Setters
@@ -38,6 +38,6 @@ public:
 
 	sf::Text displayText();
 	
-	void update(Player& player);
+	void update(int roomType, Player& player);
 };
 

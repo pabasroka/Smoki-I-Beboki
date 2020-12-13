@@ -28,6 +28,8 @@ private:
 	sf::Sprite gui;
 	sf::IntRect guiSrc;
 
+
+	//ARROWS
 	sf::Sprite arrowR;
 	sf::IntRect arrowsSrc;
 
@@ -40,6 +42,19 @@ private:
 	sf::Sprite arrowLAction;
 	sf::IntRect arrowLActionSrc;
 
+	sf::Sprite arrowU;
+	sf::IntRect arrowUSrc;
+
+	sf::Sprite arrowD;
+	sf::IntRect arrowDSrc;
+
+	sf::Sprite arrowUAction;
+	sf::IntRect arrowUActionSrc;
+
+	sf::Sprite arrowDAction;
+	sf::IntRect arrowDActionSrc;
+
+	//USER INTERFACE
 	sf::Sprite upgrade;
 	sf::IntRect upgradeSrc;
 
@@ -90,16 +105,19 @@ private:
 
 	sf::RectangleShape hpBarBg;
 	sf::RectangleShape hpBar;
+	sf::Text hpTxt;
 
 
 	/*======	ROOM	====*/
 	Room* roomA;
 	Room* roomB;
-	//int typeA;
-	//int typeB;
+	Room* selectedRoomR;
+	int selectedRoom;
+	
+	sf::Sprite insideObject;
+	sf::IntRect insideObjectSrc;
 
-	//sf::Vector2f setAPos;
-	//sf::Vector2f setBPos;
+	int randomizeEnemy;
 
 	bool isInsideRoom;
 
@@ -120,16 +138,23 @@ public:
 	void input();
 	bool isDead();
 
+
 	// I only have render function because it is a static interface
 	// dynamic sprites, interface, etc will be in Player class
 	void update();
 	void updateText();
-	
-	
+	void updateInsideRoom(int roomType);
+	//void setPlayerPropertiesRoom(int type, Player& player);
+
 	void renderGV(sf::RenderTarget& target); // I use & to get simple access to Game.cpp
 	void renderGUI(sf::RenderTarget& target); 
 	void renderText(sf::RenderTarget& target);
+
 	void renderRoom(sf::RenderTarget& target);
+
+	void randomEnemy(); //inside updateInsideRoom fun in case2: 
+	//randomEnemy from the list each one have other stats
+
 	void render(sf::RenderTarget& target);
 };
 

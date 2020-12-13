@@ -34,25 +34,30 @@ void Room::randomGenerator()
 		this->roomType = static_cast<int>(RoomType::Treasure);
 		this->roomSpriteSrc = sf::IntRect(25 * this->unitSize, 0, 9 * this->unitSize, 16 * this->unitSize);		
 	}
-	else if (randNumber > 30 && randNumber <= 60)
+	else if (randNumber > 30 && randNumber <= 70)
 	{
 		this->roomType = static_cast<int>(RoomType::Enemy);
 		this->roomSpriteSrc = sf::IntRect(35 * this->unitSize, 0, 9 * this->unitSize, 16 * this->unitSize);
 	}
-	else if (randNumber > 60 && randNumber <= 75)
+	else if (randNumber > 70 && randNumber <= 85)
 	{
 		this->roomType = static_cast<int>(RoomType::Trap);
 		this->roomSpriteSrc = sf::IntRect(45 * this->unitSize, 0, 9 * this->unitSize, 16 * this->unitSize);
 	}
-	else if (randNumber > 75 && randNumber <= 90)
+	else if (randNumber > 85 && randNumber <= 90)
 	{
 		this->roomType = static_cast<int>(RoomType::Back);
 		this->roomSpriteSrc = sf::IntRect(55 * this->unitSize, 0, 9 * this->unitSize, 16 * this->unitSize);
 	}
-	else if (randNumber > 90 && randNumber <= 100)
+	else if (randNumber > 90 && randNumber <= 95)
 	{
 		this->roomType = static_cast<int>(RoomType::Mystery);
 		this->roomSpriteSrc = sf::IntRect(65 * this->unitSize, 0, 9 * this->unitSize, 16 * this->unitSize);
+	}
+	else if (randNumber > 95 && randNumber <= 100)
+	{
+		this->roomType = static_cast<int>(RoomType::Healing);
+		this->roomSpriteSrc = sf::IntRect(75 * this->unitSize, 0, 9 * this->unitSize, 16 * this->unitSize);
 	}
 
 	std::cout << "Wylosowany numer: " << randNumber << " \n";
@@ -69,7 +74,7 @@ Room::~Room()
 {
 }
 
-const int Room::getRoomType(int type) const
+const int Room::getRoomType() const
 {
 	return this->roomType;
 }
@@ -89,53 +94,71 @@ sf::Text Room::displayText()
 	switch (this->roomType)
 	{
 	case 0:
-		this->text.setString("Licznik pokoi -1");
+		this->text.setString("");
 		return this->text;
 		break;
 	case 1:
-		this->text.setString("2");
+		this->text.setString("");
 		return this->text;
 		break;
 	case 2:
-		this->text.setString("3");
+		this->text.setString("");
 		return this->text;
 		break;
 	case 3:
-		this->text.setString("4");
+		this->text.setString("");
 		return this->text;
 		break;
 	case 4:
-		this->text.setString("5");
+		this->text.setString("");
 		return this->text;
 		break;
 	case 5:
-		this->text.setString("6");
+		this->text.setString("");
+		return this->text;
+	case 6:
+		this->text.setString("");
 		return this->text;
 		break;
 	}
 }
 
-void Room::update(Player& player)
+
+void Room::update(int roomType, Player& player)
 {
+	// 1-dmg 2-armor 3-luck 4-hp 5-hpMax 6-SP 7-keys 8-coins 9-lvl 10-exp 11-expMax 12-doorCounter
 	switch (this->roomType)
 	{
 	case 0:
-		player.setProperties(12, -1);
+		player.setProperties(12, 1);
 		break;
 	case 1:
-		player.setProperties(12, -1);
+		player.setProperties(12, 1);
 		break;
 	case 2:
-		player.setProperties(12, -1);
+		player.setProperties(4, -100);
+		player.setProperties(10, 20);
+		player.setProperties(7, 1);
 		break;
 	case 3:
-		player.setProperties(12, -1);
+		player.setProperties(4, -50);
+		player.setProperties(10, 10);
 		break;
 	case 4:
 		player.setProperties(12, -1);
 		break;
 	case 5:
-		player.setProperties(12, -1);
+		player.setProperties(12, 1);
+		break;
+	case 6:
+		if (player.getProperties(4) < player.getProperties(5))
+			player.setProperties(4, 200); 
+
+		if (player.getProperties(4) >= player.getProperties(5))
+		{
+			player.setProperties(4, -player.getProperties(4));
+			player.setProperties(4, player.getProperties(5));
+		}
 		break;
 	default:
 		std::cout << "There are no rooms of this type \n";
