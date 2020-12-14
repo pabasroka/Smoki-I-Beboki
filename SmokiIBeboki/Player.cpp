@@ -2,11 +2,11 @@
 
 void Player::initVariables()
 {
-	this->dmg = 5;
-	this->armor = 5;
+	this->dmg = 1;
+	this->armor = 1;
 	this->hpMax = 1000;
 	this->hp = this->hpMax;
-	this->luck = 5;
+	this->luck = 1;
 	this->skillPoints = 10; //0
 	this->keys = 0; //0
 	this->coins = 10; //0

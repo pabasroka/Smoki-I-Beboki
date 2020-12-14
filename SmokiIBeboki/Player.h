@@ -5,10 +5,10 @@ class Player
 {
 private:
 	//Properties / number
-	int dmg; //1
-	int armor; //2
-	int luck; //3
-	int hp; //4
+	float dmg; //1
+	float armor; //2
+	float luck; //3
+	float hp; //4
 	int hpMax; //5
 	int skillPoints; //6
 	int keys; //7

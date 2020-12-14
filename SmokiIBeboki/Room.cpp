@@ -89,6 +89,30 @@ void Room::setPosition(sf::Vector2f pos)
 	this->roomSprite.setPosition(sf::Vector2f(pos.x, pos.y));
 }
 
+void Room::combat(Player& player)
+{
+	// ======= TO DO ========
+	//Init enemy stats
+	this->enemyDmg = 50 + player.getProperties(9) * 10;
+	this->enemyHp = 200 + player.getProperties(9) * 20;
+
+	//Init player stats
+	this->playerDmg = (player.getProperties(1) * 1.5) + (player.getProperties(3) * 0.2) * 100;
+	this->playerArmor = player.getProperties(2) * 1, 1 + player.getProperties(9) * 0.1;
+	this->playerHpArmor = player.getProperties(4) * this->playerArmor;
+
+	while (this->enemyHp > 0)
+	{
+		if (player.isDead() == false)
+		{
+			player.setProperties(4, -this->enemyDmg);
+			this->enemyHp = -player.getProperties(1);
+		}
+	}
+	player.setProperties(10, 50); //exp TODO->random
+	player.setProperties(10, 50); //exp TODO->random
+}
+
 sf::Text Room::displayText()
 {
 	switch (this->roomType)
@@ -129,28 +153,35 @@ void Room::update(int roomType, Player& player)
 	// 1-dmg 2-armor 3-luck 4-hp 5-hpMax 6-SP 7-keys 8-coins 9-lvl 10-exp 11-expMax 12-doorCounter
 	switch (this->roomType)
 	{
-	case 0:
+	case 0: //empty
 		player.setProperties(12, 1);
 		break;
-	case 1:
+	case 1: //trasure
 		player.setProperties(12, 1);
 		break;
-	case 2:
-		player.setProperties(4, -100);
+	case 2: //enemy
+		this->combat(player);
+
+		player.setProperties(12, 1); // counter++
+		player.setProperties(7, 1); // key++
+
+		/*player.setProperties(4, -100);
 		player.setProperties(10, 20);
-		player.setProperties(7, 1);
+		*/
 		break;
-	case 3:
+	case 3: //trap
+		player.setProperties(12, 1);
 		player.setProperties(4, -50);
 		player.setProperties(10, 10);
 		break;
-	case 4:
+	case 4: //back
 		player.setProperties(12, -1);
 		break;
-	case 5:
+	case 5: //rand
 		player.setProperties(12, 1);
 		break;
-	case 6:
+	case 6: //heal
+		player.setProperties(12, 1);
 		if (player.getProperties(4) < player.getProperties(5))
 			player.setProperties(4, 200); 
 

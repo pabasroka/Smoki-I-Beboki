@@ -9,6 +9,10 @@ private:
 	bool endGame;
 	sf::Event sfmlEvent;
 
+	//Game Icon
+	sf::Image gameIcon;
+	sf::IntRect gameIconSrc;
+
 	//Game over
 	sf::Font font;
 	sf::Text gameOver;

@@ -22,6 +22,16 @@ private:
 
 	int randNumber;
 
+
+	//ENEMIES
+	float enemyDmg;
+	float enemyHp;
+
+	//Player
+	float playerDmg;
+	float playerArmor;
+	float playerHpArmor;
+
 	void initVariables();
 	void randomGenerator();
 
@@ -35,6 +45,9 @@ public:
 
 	//Setters
 	void setPosition(sf::Vector2f pos);
+
+	//Functions
+	void combat(Player& player);
 
 	sf::Text displayText();
 	

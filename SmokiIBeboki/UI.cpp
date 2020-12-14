@@ -62,7 +62,7 @@ void UI::initSprites()
 	/*=================		GRAPHICAL USER INTERFACE	===================*/
 
 	//Set the properties
-	this->guiSrc = sf::IntRect(0, 48 * this->unitSize, 800, 20 * this->unitSize);
+	this->guiSrc = sf::IntRect(0, 47 * this->unitSize, 800, 20 * this->unitSize);
 	this->gui.setTextureRect(guiSrc);
 	this->gui.setPosition(sf::Vector2f(0, 30.f * this->unitSize));
 	this->gui.setScale(1.f, 1.f);
@@ -207,12 +207,12 @@ void UI::initText()
 	this->lvlTxt.setFillColor(sf::Color::White);
 	this->lvlTxt.setOutlineColor(sf::Color::Black);
 	this->lvlTxt.setOutlineThickness(3.f);
-	this->lvlTxt.setPosition(680, 735);
+	this->lvlTxt.setPosition(680, 725);
 
 	this->fistTxt = this->lvlTxt;
 	this->fistTxt.setCharacterSize(60);
 	this->fistTxt.setPosition(sf::Vector2f(7 * this->unitSize, 31 * this->unitSize));
-
+	
 	this->shieldTxt = this->fistTxt;
 	this->shieldTxt.setPosition(sf::Vector2f(7 * this->unitSize, 37 * this->unitSize));
 
@@ -578,7 +578,7 @@ void UI::renderGUI(sf::RenderTarget& target) // Graphical User Interface
 	target.draw(this->skillPoints);
 	target.draw(this->coin);
 	target.draw(this->key);
-	target.draw(this->expBarBg);	
+	//target.draw(this->expBarBg);	
 	target.draw(this->expBar);	
 	target.draw(this->door);	
 	target.draw(this->hpBarBg);	
