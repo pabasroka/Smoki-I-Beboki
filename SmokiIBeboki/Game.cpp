@@ -28,8 +28,8 @@ void Game::initGameOverText()
 	this->resetTxt.setOutlineColor(sf::Color::Black);
 	this->resetTxt.setOutlineThickness(3.f);
 	this->resetTxt.setPosition(20, 350);
-	this->resetTxt.setString("WCISNIJ 'R' ABY ZRESTARTOWAC !");
-
+	this->resetString << "Twoj wynik: " << this->roomCounter << " \n \n WCISNIJ 'R' ABY ZRESTARTOWAC !"; //this->roomCounter << " \n \n WCISNIJ 'R' ABY ZRESTARTOWAC !";
+	this->resetTxt.setString(this->resetString.str());
 }
 
 void Game::initSprite()
@@ -105,7 +105,6 @@ void Game::render()
 	if (this->endGame)
 	{
 		this->window->clear(sf::Color::Black);
-		std::cout << "KONIEC GRY ! \n";
 
 		this->window->draw(gameOver);
 		this->window->draw(resetTxt);
@@ -121,6 +120,7 @@ void Game::render()
 
 		//Render frame
 		this->ui->render(*this->window);
+		this->roomCounter = this->ui->getRoomCounter();
 
 		//Display new frame
 		this->window->display();

@@ -103,7 +103,7 @@ void Room::combat(Player& player)
 	this->escapeChance = (player.getProperties(3) * 25) / (player.getProperties(9) * 2) + 40;
 	this->combatHealth = player.getProperties(4) * this->playerArmor;
 
-	std::cout << "\ndmg: " << this->playerDmg << std::endl;
+	std::cout << "\n dmg: " << this->playerDmg << std::endl;
 	std::cout << "combat health: " << this->combatHealth << std::endl;
 
 	while (this->enemyHp > 0)
@@ -111,17 +111,21 @@ void Room::combat(Player& player)
 		if (this->combatHealth <= 0)
 			player.setProperties(4, -100);
 
-		//player.setProperties(4, -this->enemyDmg);
 		this->combatHealth -= this->enemyDmg;
-		this->enemyHp = -this->playerDmg;
+		this->enemyHp -= this->playerDmg;
 		this->totalDamageTaken += this->enemyDmg;
 
 		std::cout << "enemy hp: " << this->enemyHp << std::endl;
 		std::cout << "hp: " << this->combatHealth << std::endl;
 	}
-
 	std::cout << "total damage taken: " << this->totalDamageTaken << std::endl;
+
+	//this->combatHealth -= this->totalDamageTaken;
+	
+	//player.setProperties(4, -player.getProperties(4));
 	player.setProperties(4, -this->totalDamageTaken);
+
+	//player.setHP(this->combatHealth);
 
 	//this->coinsDrop = player.getProperties(9) + 5;
 
@@ -174,6 +178,7 @@ void Room::update(int roomType, Player& player)
 		break;
 	case 1: //trasure
 		player.setProperties(12, 1);
+		player.setProperties(8, rand() % 14 + 7);
 		break;
 	case 2: //enemy
 		this->combat(player);

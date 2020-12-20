@@ -1,5 +1,6 @@
 #pragma once
 #include"UI.h"
+#include <sstream>
 
 class Game
 {
@@ -16,7 +17,9 @@ private:
 	//Game over
 	sf::Font font;
 	sf::Text gameOver;
+	std::stringstream resetString;
 	sf::Text resetTxt;
+	int roomCounter;
 
 	//Objects from other classes
 	//Player* player;

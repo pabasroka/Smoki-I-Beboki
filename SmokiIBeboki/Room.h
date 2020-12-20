@@ -24,15 +24,15 @@ private:
 
 
 	//ENEMIES
-	float enemyDmg;
-	float enemyHp;
+	float enemyDmg{};
+	float enemyHp{};
 
 	//Player
-	float playerDmg;
-	float playerArmor;
-	float critChance;
-	float escapeChance;
-	float combatHealth;
+	float playerDmg{};
+	float playerArmor{};
+	float critChance{};
+	float escapeChance{};
+	float combatHealth{};
 	float totalDamageTaken{};
 
 	//float coinsDrop;

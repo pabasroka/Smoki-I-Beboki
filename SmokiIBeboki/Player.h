@@ -26,6 +26,7 @@ public:
 
 	//Getters
 	const int getProperties(int type) const;
+	void setHP(int value);
 
 	//Setters
 	void setProperties(int type, int value = 0);

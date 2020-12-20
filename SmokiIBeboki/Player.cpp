@@ -72,6 +72,11 @@ const int Player::getProperties(int type) const
 	}
 }
 
+void Player::setHP(int value)
+{
+	this->hp = value;
+}
+
 void Player::setProperties(int type, int value)
 {
 	switch (type)
@@ -133,7 +138,6 @@ const bool Player::isDead() const
 {
 	if (this->hp <= 0)
 	{
-		std::cout << "Zginales !!! \n";
 		return true;
 	}
 	return false;

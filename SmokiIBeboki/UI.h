@@ -93,7 +93,6 @@ private:
 	sf::Sprite upgradeKey;
 	sf::IntRect upgradeKeySrc;
 
-	sf::RectangleShape expBarBg;
 	sf::RectangleShape expBar;
 	sf::Text lvlTxt;
 
@@ -110,9 +109,12 @@ private:
 	sf::RectangleShape hpBarBg;
 	sf::RectangleShape hpBar;
 	sf::Text hpTxt;
+	sf::Sprite upgradeHp;
+	sf::IntRect upgradeHpSrc;
 
 	sf::Sprite upgradeCost;
 	sf::IntRect upgradeCostSrc;
+	sf::Sprite upgradeCost2;
 
 
 	/*======	ROOM	====*/
@@ -146,6 +148,8 @@ public:
 	void input();
 	bool isDead();
 
+	//Getters
+	int const& getRoomCounter() const;
 
 	// I only have render function because it is a static interface
 	// dynamic sprites, interface, etc will be in Player class

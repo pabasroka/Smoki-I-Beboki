@@ -60,6 +60,7 @@ void UI::initSprites()
 	this->upgradeSkillPoints.setTexture(this->gameTextures);
 	this->insideObject.setTexture(this->gameTextures);
 	this->upgradeCost.setTexture(this->gameTextures);
+	this->upgradeHp.setTexture(this->gameTextures);
 
 
 	/*=================		GRAPHICAL USER INTERFACE	===================*/
@@ -103,7 +104,7 @@ void UI::initSprites()
 	this->swordSrc = sf::IntRect(2 * this->unitSize, 0, this->unitSize, this->unitSize);
 	this->sword.setTextureRect(this->swordSrc);
 	this->sword.setScale(5.f, 5.f);
-	this->sword.setPosition(sf::Vector2f(20 * this->unitSize, 5 * this->unitSize));
+	this->sword.setPosition(sf::Vector2f(1 * this->unitSize, 31 * this->unitSize));
 
 	//Shield
 	this->shieldSrc = sf::IntRect(3 * this->unitSize, 0, this->unitSize, this->unitSize);
@@ -173,10 +174,6 @@ void UI::initSprites()
 	this->upgradeKey.setPosition(sf::Vector2f(37 * this->unitSize, 37 * this->unitSize));
 
 	//EXP BAR
-	this->expBarBg.setSize(sf::Vector2f(800.f, 20.f));
-	this->expBarBg.setFillColor(sf::Color(155, 135, 12, 255));
-	this->expBarBg.setPosition(sf::Vector2f(0, 780));
-
 	this->expBar.setFillColor(sf::Color(212, 175, 55, 255));
 	this->expBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(10)) * 20.f, 20.f));
 	this->expBar.setPosition(sf::Vector2f(0, 780));
@@ -193,12 +190,17 @@ void UI::initSprites()
 	this->hpBarBg.setOutlineColor(sf::Color(255, 50, 50, 255));
 	this->hpBarBg.setOutlineThickness(3.f);
 	this->hpBarBg.setPosition(sf::Vector2f(13 * this->unitSize, 25 * this->unitSize));
+	this->hpBarBg.setOutlineColor(sf::Color(255, 0, 0, 255));
+	this->hpBarBg.setOutlineThickness(6.f);
 
 	this->hpBar.setSize(sf::Vector2f(400.f, 40.f));
 	this->hpBar.setFillColor(sf::Color(255, 50, 50, 255));
-	this->hpBarBg.setOutlineColor(sf::Color(255, 0, 0, 255));
-	this->hpBarBg.setOutlineThickness(6.f);
 	this->hpBar.setPosition(sf::Vector2f(13 * this->unitSize, 25 * this->unitSize));
+
+	this->upgradeHpSrc = sf::IntRect(4 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
+	this->upgradeHp.setTextureRect(this->upgradeHpSrc);
+	this->upgradeHp.setScale(3.f, 3.f);
+	this->upgradeHp.setPosition(sf::Vector2f(40 * this->unitSize, 25 * this->unitSize));
 
 	//Inside object
 	this->insideObjectSrc = sf::IntRect(51 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
@@ -211,6 +213,9 @@ void UI::initSprites()
 	this->upgradeCost.setTextureRect(this->upgradeCostSrc);
 	this->upgradeCost.setScale(5.f, 5.f);
 	this->upgradeCost.setPosition(sf::Vector2f(43 * this->unitSize, 35 * this->unitSize));
+	this->upgradeCost2 = this->upgradeCost;
+	this->upgradeCost2.setScale(4.f, 4.f);
+	this->upgradeCost2.setPosition(sf::Vector2f(44 * this->unitSize, 25 * this->unitSize));
 
 	//Rooms
 	this->roomA = new Room;
@@ -304,7 +309,7 @@ void UI::input()
 		//Arrow right && ROOM B
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && arrowTimer >= arrowTimerMax)
 		{
-			std::cout << "prawo";
+			//std::cout << "prawo";
 			this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize); //set default
 			this->arrowR.setTextureRect(arrowsSrc);
 			arrowTimer = 0;
@@ -335,7 +340,7 @@ void UI::input()
 		//Arrow left && ROOM A
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && arrowTimer >= arrowTimerMax)
 		{
-			std::cout << "lewo";
+			//std::cout << "lewo";
 			this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize); //set default
 			this->arrowL.setScale(-5.f, 5.f);
 			this->arrowL.setTextureRect(arrowsSrc);
@@ -434,19 +439,27 @@ void UI::input()
 		this->upgradeSkillPointsSrc = sf::IntRect(9 * this->unitSize, 2 * this->unitSize, this->unitSize, this->unitSize);
 		this->upgradeSkillPoints.setTextureRect(upgradeSkillPointsSrc);
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C) && this->player->getProperties(8) >= 10 && this->player->getProperties(4) <= 960 && inputTimer >= inputTimerMax)
+	{
+		this->player->setProperties(8, -10);
+		this->player->setProperties(4, 40);
+		inputTimer = 0;
+		this->upgradeHpSrc= sf::IntRect(4 * this->unitSize, 2 * this->unitSize, this->unitSize, this->unitSize);
+		this->upgradeHp.setTextureRect(upgradeHpSrc);
+	}
 
 	/* ==================================== dev tools ==================================== */
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
 	{
 		this->player->setProperties(4, -1000);
 		this->hpBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(4) * 0.4), 40.f)); // 0.4 -> hbbarwidth/hpMax 400/1000 = 0.4 
-		std::cout << "Hp: " << this->player->getProperties(4) << "\n";
+		//std::cout << "Hp: " << this->player->getProperties(4) << "\n";
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
 	{
-		std::cout << "exp + 10";
+		//std::cout << "exp + 10";
 		this->player->setProperties(10, rand() % 25 + 5); //(10,10)
-		std::cout << "Exp: " << this->player->getProperties(10);
+		//std::cout << "Exp: " << this->player->getProperties(10);
 		this->player->setProperties(8, 10);
 
 		if (this->player->getProperties(10) >= this->player->getProperties(11))
@@ -480,6 +493,11 @@ bool UI::isDead()
 	return this->player->isDead();
 }
 
+int const& UI::getRoomCounter() const
+{
+	return this->player->getProperties(12); //player->getProperties(12);
+}
+
 void UI::update()
 {
 	if (this->arrowTimer < this->arrowTimerMax) //Incement timer 
@@ -510,6 +528,8 @@ void UI::update()
 		this->upgradeSkillPoints.setTextureRect(upgradeSkillPointsSrc);
 		this->upgradeKeySrc = sf::IntRect(8 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
 		this->upgradeKey.setTextureRect(this->upgradeKeySrc);
+		this->upgradeHpSrc = sf::IntRect(4 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
+		this->upgradeHp.setTextureRect(this->upgradeHpSrc);
 	}
 	//HEALTH BAR AND EXP BAR
 	this->hpBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(4) * 0.4), 40.f));
@@ -595,10 +615,10 @@ void UI::renderGUI(sf::RenderTarget& target) // Graphical User Interface
 {
 	target.draw(this->gui);
 	//target.draw(this->upgrade);
-	//target.draw(this->sword);
+	target.draw(this->sword);
 	target.draw(this->shield);	
 	target.draw(this->upgradeShield);
-	target.draw(this->fist);
+	//target.draw(this->fist);
 	target.draw(this->upgradeFist);
 	target.draw(this->clover);
 	target.draw(this->upgradeClover);
@@ -607,13 +627,14 @@ void UI::renderGUI(sf::RenderTarget& target) // Graphical User Interface
 	target.draw(this->coin);
 	target.draw(this->key);
 	target.draw(this->upgradeKey);
-	//target.draw(this->expBarBg);	
+	target.draw(this->hpBarBg);	
 	target.draw(this->expBar);	
 	target.draw(this->door);	
-	target.draw(this->hpBarBg);	
+	target.draw(this->upgradeHp);	
 	target.draw(this->hpBar);	
 	target.draw(this->heart);
 	target.draw(this->upgradeCost);
+	target.draw(this->upgradeCost2);
 }
 
 void UI::renderText(sf::RenderTarget& target)
@@ -645,7 +666,7 @@ void UI::renderRoom(sf::RenderTarget& target)
 
 void UI::randomEnemy()
 {
-	this->randomizeEnemy = rand() % 5;
+	this->randomizeEnemy = rand() % 6;
 	switch (this->randomizeEnemy)
 	{
 	case 0:
@@ -664,6 +685,9 @@ void UI::randomEnemy()
 		break;
 	case 4:
 		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 60 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		break;
+	case 5:
+		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 63 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
 		break;
 	}
 
