@@ -30,7 +30,12 @@ private:
 	//Player
 	float playerDmg;
 	float playerArmor;
-	float playerHpArmor;
+	float critChance;
+	float escapeChance;
+	float combatHealth;
+	float totalDamageTaken{};
+
+	//float coinsDrop;
 
 	void initVariables();
 	void randomGenerator();

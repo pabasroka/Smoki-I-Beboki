@@ -90,6 +90,8 @@ private:
 	sf::Sprite key;
 	sf::IntRect keySrc;
 	sf::Text keyTxt;
+	sf::Sprite upgradeKey;
+	sf::IntRect upgradeKeySrc;
 
 	sf::RectangleShape expBarBg;
 	sf::RectangleShape expBar;
@@ -98,6 +100,8 @@ private:
 	sf::Sprite skillPoints;
 	sf::IntRect skillPointsSrc;
 	sf::Text skillPointsTxt;
+	sf::Sprite upgradeSkillPoints;
+	sf::IntRect upgradeSkillPointsSrc;
 
 	sf::Sprite door;
 	sf::IntRect doorSrc;
@@ -106,6 +110,9 @@ private:
 	sf::RectangleShape hpBarBg;
 	sf::RectangleShape hpBar;
 	sf::Text hpTxt;
+
+	sf::Sprite upgradeCost;
+	sf::IntRect upgradeCostSrc;
 
 
 	/*======	ROOM	====*/
@@ -118,6 +125,7 @@ private:
 	sf::IntRect insideObjectSrc;
 
 	int randomizeEnemy;
+	int randomizeTrap;
 
 	bool isInsideRoom;
 
@@ -144,7 +152,6 @@ public:
 	void update();
 	void updateText();
 	void updateInsideRoom(int roomType);
-	//void setPlayerPropertiesRoom(int type, Player& player);
 
 	void renderGV(sf::RenderTarget& target); // I use & to get simple access to Game.cpp
 	void renderGUI(sf::RenderTarget& target); 
@@ -153,7 +160,7 @@ public:
 	void renderRoom(sf::RenderTarget& target);
 
 	void randomEnemy(); //inside updateInsideRoom fun in case2: 
-	//randomEnemy from the list each one have other stats
+	void randomTrap(); //inside --||-- in case 3:
 
 	void render(sf::RenderTarget& target);
 };

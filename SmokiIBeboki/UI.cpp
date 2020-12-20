@@ -5,7 +5,7 @@ void UI::initVariables()
 	this->unitSize = 16;
 	this->arrowTimerMax = 35;
 	this->arrowTimer = this->arrowTimerMax;
-	this->inputTimerMax = 25;
+	this->inputTimerMax = 15;
 	this->inputTimer = this->inputTimerMax;
 	this->expIncrease = 8; // when you divide screen width(800) / 100(maxExp you can gain at first lvl) you got 8
 	this->isInsideRoom = false;
@@ -53,124 +53,137 @@ void UI::initSprites()
 	this->clover.setTexture(this->gameTextures);
 	this->upgradeClover.setTexture(this->gameTextures);
 	this->key.setTexture(this->gameTextures);
+	this->upgradeKey.setTexture(this->gameTextures);
 	this->coin.setTexture(this->gameTextures);
 	this->door.setTexture(this->gameTextures);
 	this->skillPoints.setTexture(this->gameTextures);
+	this->upgradeSkillPoints.setTexture(this->gameTextures);
 	this->insideObject.setTexture(this->gameTextures);
+	this->upgradeCost.setTexture(this->gameTextures);
 
 
 	/*=================		GRAPHICAL USER INTERFACE	===================*/
 
 	//Set the properties
 	this->guiSrc = sf::IntRect(0, 47 * this->unitSize, 800, 20 * this->unitSize);
-	this->gui.setTextureRect(guiSrc);
+	this->gui.setTextureRect(this->guiSrc);
 	this->gui.setPosition(sf::Vector2f(0, 30.f * this->unitSize));
 	this->gui.setScale(1.f, 1.f);
 
 	//Arrows
 	this->arrowsSrc = sf::IntRect(0, 0, this->unitSize, this->unitSize);
-	this->arrowR.setTextureRect(arrowsSrc);
+	this->arrowR.setTextureRect(this->arrowsSrc);
 	this->arrowR.setScale(5.f, 5.f);
 	this->arrowR.setPosition(sf::Vector2f(25 * this->unitSize, 18 * this->unitSize));
 
 	this->arrowLSrc = sf::IntRect(0, 0, this->unitSize, this->unitSize);
-	this->arrowL.setTextureRect(arrowLSrc);
+	this->arrowL.setTextureRect(this->arrowLSrc);
 	this->arrowL.setScale(-5.f, 5.f);
 	this->arrowL.setPosition(sf::Vector2f(24 * this->unitSize, 18 * this->unitSize));
 
 	this->arrowUSrc = sf::IntRect(0, 0, this->unitSize, this->unitSize);
-	this->arrowU.setTextureRect(arrowUSrc);
+	this->arrowU.setTextureRect(this->arrowUSrc);
 	this->arrowU.setScale(5.f, 5.f);
 	this->arrowU.rotate(-90.f);
 	this->arrowU.setPosition(sf::Vector2f(35 * this->unitSize, 10 * this->unitSize));
 
 	this->arrowDSrc = sf::IntRect(0, 0, this->unitSize, this->unitSize);
-	this->arrowD.setTextureRect(arrowDSrc);
+	this->arrowD.setTextureRect(this->arrowDSrc);
 	this->arrowD.setScale(5.f, 5.f);
 	this->arrowD.rotate(90.f);
 	this->arrowD.setPosition(sf::Vector2f(40 * this->unitSize, 13 * this->unitSize));
 
 	//Upgrade mark
 	this->upgradeSrc = sf::IntRect(this->unitSize, 0, this->unitSize, this->unitSize);
-	this->upgrade.setTextureRect(upgradeSrc);
+	this->upgrade.setTextureRect(this->upgradeSrc);
 	this->upgrade.setScale(3.f, 3.f);
 	this->upgrade.setPosition(sf::Vector2f(10 * this->unitSize, 32 * this->unitSize));
 
 	//Sword
 	this->swordSrc = sf::IntRect(2 * this->unitSize, 0, this->unitSize, this->unitSize);
-	this->sword.setTextureRect(swordSrc);
+	this->sword.setTextureRect(this->swordSrc);
 	this->sword.setScale(5.f, 5.f);
 	this->sword.setPosition(sf::Vector2f(20 * this->unitSize, 5 * this->unitSize));
 
 	//Shield
 	this->shieldSrc = sf::IntRect(3 * this->unitSize, 0, this->unitSize, this->unitSize);
-	this->shield.setTextureRect(shieldSrc);
+	this->shield.setTextureRect(this->shieldSrc);
 	this->shield.setScale(5.f, 5.f);
 	this->shield.setPosition(sf::Vector2f(1 * this->unitSize, 37 * this->unitSize));
 
 	this->upgradeShieldSrc = sf::IntRect(3 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
-	this->upgradeShield.setTextureRect(upgradeShieldSrc);
+	this->upgradeShield.setTextureRect(this->upgradeShieldSrc);
 	this->upgradeShield.setScale(5.f, 5.f);
 	this->upgradeShield.setPosition(sf::Vector2f(13 * this->unitSize, 37 * this->unitSize));
 
 	//Heart
 	this->heartSrc = sf::IntRect(4 * this->unitSize, 0, this->unitSize, this->unitSize);
-	this->heart.setTextureRect(heartSrc);
+	this->heart.setTextureRect(this->heartSrc);
 	this->heart.setScale(5.f, 5.f);
 	this->heart.setPosition(sf::Vector2f(12.8 * this->unitSize, 23.5 * this->unitSize));
 
 	//Fist
 	this->fistSrc = sf::IntRect(5 * this->unitSize, 0, this->unitSize, this->unitSize);
-	this->fist.setTextureRect(fistSrc);
+	this->fist.setTextureRect(this->fistSrc);
 	this->fist.setScale(5.f, 5.f);
 	this->fist.setPosition(sf::Vector2f(1 * this->unitSize, 31 * this->unitSize));
 
 	this->upgradeFistSrc = sf::IntRect(5 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
-	this->upgradeFist.setTextureRect(upgradeFistSrc);
+	this->upgradeFist.setTextureRect(this->upgradeFistSrc);
 	this->upgradeFist.setScale(5.f, 5.f);
 	this->upgradeFist.setPosition(sf::Vector2f(13 * this->unitSize, 31 * this->unitSize));
 
 	//Clover
 	this->cloverSrc = sf::IntRect(6 * this->unitSize, 0, this->unitSize, this->unitSize);
-	this->clover.setTextureRect(cloverSrc);
+	this->clover.setTextureRect(this->cloverSrc);
 	this->clover.setScale(5.f, 5.f);
 	this->clover.setPosition(sf::Vector2f(1 * this->unitSize, 43 * this->unitSize));
 
 	this->upgradeCloverSrc = sf::IntRect(6 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
-	this->upgradeClover.setTextureRect(upgradeCloverSrc);
+	this->upgradeClover.setTextureRect(this->upgradeCloverSrc);
 	this->upgradeClover.setScale(5.f, 5.f);
 	this->upgradeClover.setPosition(sf::Vector2f(13 * this->unitSize, 43 * this->unitSize));
 
 	//Skill points
 	this->skillPointsSrc = sf::IntRect(9 * this->unitSize, 0, this->unitSize, this->unitSize);
-	this->skillPoints.setTextureRect(skillPointsSrc);
+	this->skillPoints.setTextureRect(this->skillPointsSrc);
 	this->skillPoints.setScale(5.f, 5.f);
 	this->skillPoints.setPosition(sf::Vector2f(25 * this->unitSize, 31 * this->unitSize));
 
+	this->upgradeSkillPointsSrc = sf::IntRect(9 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
+	this->upgradeSkillPoints.setTextureRect(this->upgradeSkillPointsSrc);
+	this->upgradeSkillPoints.setScale(5.f, 5.f);
+	this->upgradeSkillPoints.setPosition(sf::Vector2f(37 * this->unitSize, 31 * this->unitSize));
+
 	//Coin
 	this->coinSrc = sf::IntRect(7 * this->unitSize, 0, this->unitSize, this->unitSize);
-	this->coin.setTextureRect(coinSrc);
+	this->coin.setTextureRect(this->coinSrc);
 	this->coin.setScale(5.f, 5.f);
-	this->coin.setPosition(sf::Vector2f(25 * this->unitSize, 37 * this->unitSize));
+	this->coin.setPosition(sf::Vector2f(25 * this->unitSize, 43 * this->unitSize));
 
 	//Key
 	this->keySrc = sf::IntRect(8 * this->unitSize, 0, this->unitSize, this->unitSize);
-	this->key.setTextureRect(keySrc);
+	this->key.setTextureRect(this->keySrc);
 	this->key.setScale(5.f, 5.f);
-	this->key.setPosition(sf::Vector2f(25 * this->unitSize, 43 * this->unitSize));
+	this->key.setPosition(sf::Vector2f(25 * this->unitSize, 37 * this->unitSize));
+
+	this->upgradeKeySrc = sf::IntRect(8 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
+	this->upgradeKey.setTextureRect(this->upgradeKeySrc);
+	this->upgradeKey.setScale(5.f, 5.f);
+	this->upgradeKey.setPosition(sf::Vector2f(37 * this->unitSize, 37 * this->unitSize));
 
 	//EXP BAR
 	this->expBarBg.setSize(sf::Vector2f(800.f, 20.f));
 	this->expBarBg.setFillColor(sf::Color(155, 135, 12, 255));
 	this->expBarBg.setPosition(sf::Vector2f(0, 780));
 
-	this->expBar.setFillColor(sf::Color::Yellow);
+	this->expBar.setFillColor(sf::Color(212, 175, 55, 255));
 	this->expBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(10)) * 20.f, 20.f));
 	this->expBar.setPosition(sf::Vector2f(0, 780));
 
 	//Door counter
 	this->doorSrc = sf::IntRect(10 * this->unitSize, 0, this->unitSize, this->unitSize);
-	this->door.setTextureRect(doorSrc);
+	this->door.setTextureRect(this->doorSrc);
 	this->door.setScale(4.f, 4.f);
 	this->door.setPosition(sf::Vector2f(0 * this->unitSize, 25 * this->unitSize));
 	
@@ -193,6 +206,13 @@ void UI::initSprites()
 	this->insideObject.setPosition(350.f, 150.f);
 	this->insideObject.setScale(5.f, 5.f);
 
+	//Upgrade cost sprite
+	this->upgradeCostSrc = sf::IntRect(7 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
+	this->upgradeCost.setTextureRect(this->upgradeCostSrc);
+	this->upgradeCost.setScale(5.f, 5.f);
+	this->upgradeCost.setPosition(sf::Vector2f(43 * this->unitSize, 35 * this->unitSize));
+
+	//Rooms
 	this->roomA = new Room;
 	this->roomB = new Room;
 	this->selectedRoom = 0;
@@ -223,10 +243,10 @@ void UI::initText()
 	this->skillPointsTxt.setPosition(sf::Vector2f(31 * this->unitSize, 31 * this->unitSize));
 
 	this->coinTxt = this->fistTxt;
-	this->coinTxt.setPosition(sf::Vector2f(31 * this->unitSize, 37 * this->unitSize));
+	this->coinTxt.setPosition(sf::Vector2f(31 * this->unitSize, 43 * this->unitSize));
 
 	this->keyTxt = this->fistTxt;
-	this->keyTxt.setPosition(sf::Vector2f(31 * this->unitSize, 43 * this->unitSize));
+	this->keyTxt.setPosition(sf::Vector2f(31 * this->unitSize, 37 * this->unitSize));
 
 	this->doorTxt = this->fistTxt;
 	this->doorTxt.setCharacterSize(40);
@@ -288,7 +308,12 @@ void UI::input()
 			this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize); //set default
 			this->arrowR.setTextureRect(arrowsSrc);
 			arrowTimer = 0;
-			if (this->roomB->getRoomType() == 1) //if treasure room, you must have key to open door
+			if (this->roomB->getRoomType() == 4) //if roomType == back: decrease room counter 
+			{
+				player->setProperties(12, -1);
+				this->initRooms();
+			}
+			else if (this->roomB->getRoomType() == 1) //if treasure room, you must have key to open door
 			{
 				if (player->getProperties(7) >= 1)
 				{
@@ -315,7 +340,12 @@ void UI::input()
 			this->arrowL.setScale(-5.f, 5.f);
 			this->arrowL.setTextureRect(arrowsSrc);
 			arrowTimer = 0;
-			if (this->roomA->getRoomType() == 1) //if treasure room, you must have key to open door
+			if (this->roomA->getRoomType() == 4) //if roomType == back: decrease room counter 
+			{
+				player->setProperties(12, -1);
+				this->initRooms();
+			}
+			else if (this->roomA->getRoomType() == 1) //if treasure room, you must have key to open door
 			{
 				if (player->getProperties(7) >= 1)
 				{
@@ -364,7 +394,7 @@ void UI::input()
 	}
 	
 	//INTERACTION IN BOTH OF STATES
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && this->player->getProperties(6) >= 1 && inputTimer >= inputTimerMax)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && this->player->getProperties(6) >= 1 && inputTimer >= inputTimerMax)
 	{
 		this->player->setProperties(6, -1);
 		this->player->setProperties(2, 1);
@@ -372,7 +402,7 @@ void UI::input()
 		this->upgradeShieldSrc = sf::IntRect(3 * this->unitSize, 2 * this->unitSize, this->unitSize, this->unitSize);
 		this->upgradeShield.setTextureRect(upgradeShieldSrc);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && this->player->getProperties(6) >= 1 && inputTimer >= inputTimerMax)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && this->player->getProperties(6) >= 1 && inputTimer >= inputTimerMax)
 	{
 		this->player->setProperties(6, -1);
 		this->player->setProperties(1, 1);
@@ -388,6 +418,22 @@ void UI::input()
 		this->upgradeCloverSrc = sf::IntRect(6 * this->unitSize, 2 * this->unitSize, this->unitSize, this->unitSize);
 		this->upgradeClover.setTextureRect(upgradeCloverSrc);
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && this->player->getProperties(8) >= 10 && inputTimer >= inputTimerMax)
+	{
+		this->player->setProperties(8, -10);
+		this->player->setProperties(7, 1);
+		inputTimer = 0;
+		this->upgradeKeySrc = sf::IntRect(8 * this->unitSize, 2 * this->unitSize, this->unitSize, this->unitSize);
+		this->upgradeKey.setTextureRect(this->upgradeKeySrc);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X) && this->player->getProperties(8) >= 10 && inputTimer >= inputTimerMax)
+	{
+		this->player->setProperties(8, -10);
+		this->player->setProperties(6, 1);
+		inputTimer = 0;
+		this->upgradeSkillPointsSrc = sf::IntRect(9 * this->unitSize, 2 * this->unitSize, this->unitSize, this->unitSize);
+		this->upgradeSkillPoints.setTextureRect(upgradeSkillPointsSrc);
+	}
 
 	/* ==================================== dev tools ==================================== */
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
@@ -401,6 +447,7 @@ void UI::input()
 		std::cout << "exp + 10";
 		this->player->setProperties(10, rand() % 25 + 5); //(10,10)
 		std::cout << "Exp: " << this->player->getProperties(10);
+		this->player->setProperties(8, 10);
 
 		if (this->player->getProperties(10) >= this->player->getProperties(11))
 		{
@@ -459,6 +506,10 @@ void UI::update()
 		this->upgradeFist.setTextureRect(upgradeFistSrc);
 		this->upgradeCloverSrc = sf::IntRect(6 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
 		this->upgradeClover.setTextureRect(upgradeCloverSrc);
+		this->upgradeSkillPointsSrc = sf::IntRect(9 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
+		this->upgradeSkillPoints.setTextureRect(upgradeSkillPointsSrc);
+		this->upgradeKeySrc = sf::IntRect(8 * this->unitSize, 1 * this->unitSize, this->unitSize, this->unitSize);
+		this->upgradeKey.setTextureRect(this->upgradeKeySrc);
 	}
 	//HEALTH BAR AND EXP BAR
 	this->hpBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(4) * 0.4), 40.f));
@@ -486,6 +537,8 @@ void UI::updateText()
 
 void UI::updateInsideRoom(int roomType)
 {
+	this->insideObject.setPosition(350.f, 150.f);
+	this->insideObject.setScale(5.f, 5.f);
 	switch (roomType)
 	{
 	case 0: 
@@ -493,13 +546,16 @@ void UI::updateInsideRoom(int roomType)
 		break;
 	case 1:
 		this->insideObjectSrc = sf::IntRect(51 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);	
+		this->insideObject.setScale(sf::Vector2f(2.7f, 2.7f));
+		this->insideObject.setPosition(sf::Vector2f(320.f, 220.f));
 		break;
 	case 2: 
 		//this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
-		randomEnemy();
+		this->randomEnemy();
 		break;
 	case 3: 
-		this->insideObjectSrc = sf::IntRect(57 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		//this->insideObjectSrc = sf::IntRect(57 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		this->randomTrap();
 		break;
 	case 4: 
 		this->insideObjectSrc = sf::IntRect(60 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
@@ -513,35 +569,6 @@ void UI::updateInsideRoom(int roomType)
 	}
 	this->insideObject.setTextureRect(this->insideObjectSrc);
 }
-
-/* SAME FUNCTION BUT INSIDE ROOM CLASS
-void UI::setPlayerPropertiesRoom(int type, Player& player)
-{
-	// 1-dmg 2-armor 3-luck 4-hp 5-hpMax 6-SP 7-keys 8-coins 9-lvl 10-exp 11-expMax 12-doorCounter
-	switch (type)
-	{
-	case 0:
-		this->player->setProperties(12, 1);
-		break;
-	case 1:
-		this->player->setProperties(8, 50);
-		break;
-	case 2:
-		this->player->setProperties(4, -200);
-		break;
-	case 3:
-		this->player->setProperties(4, -100);
-	case 4:
-		this->player->setProperties(12, -1);
-		break;
-	case 5:
-		break;
-	case 6:
-		this->player->setProperties(12, -1);
-		break;
-		break;
-	}
-}*/
 
 void UI::renderGV(sf::RenderTarget& target) //Game view
 {
@@ -576,14 +603,17 @@ void UI::renderGUI(sf::RenderTarget& target) // Graphical User Interface
 	target.draw(this->clover);
 	target.draw(this->upgradeClover);
 	target.draw(this->skillPoints);
+	target.draw(this->upgradeSkillPoints);
 	target.draw(this->coin);
 	target.draw(this->key);
+	target.draw(this->upgradeKey);
 	//target.draw(this->expBarBg);	
 	target.draw(this->expBar);	
 	target.draw(this->door);	
 	target.draw(this->hpBarBg);	
 	target.draw(this->hpBar);	
 	target.draw(this->heart);
+	target.draw(this->upgradeCost);
 }
 
 void UI::renderText(sf::RenderTarget& target)
@@ -638,6 +668,22 @@ void UI::randomEnemy()
 	}
 
 	
+}
+
+void UI::randomTrap()
+{
+	this->randomizeTrap = rand() % 2;
+	switch (this->randomizeTrap)
+	{
+	case 0:
+		this->insideObjectSrc = sf::IntRect(57 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		this->insideObject.setPosition(sf::Vector2f(240.f, 180.f));
+		break;
+	case 1:
+		this->insideObjectSrc = sf::IntRect(57 * this->unitSize, 51 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		this->insideObject.setPosition(sf::Vector2f(190.f, 80.f));
+		break;
+	}
 }
 
 void UI::render(sf::RenderTarget& target)

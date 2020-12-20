@@ -93,24 +93,40 @@ void Room::combat(Player& player)
 {
 	// ======= TO DO ========
 	//Init enemy stats
-	this->enemyDmg = 50 + player.getProperties(9) * 10;
-	this->enemyHp = 200 + player.getProperties(9) * 20;
+	this->enemyDmg = player.getProperties(9) * 15;
+	this->enemyHp = player.getProperties(9) + 10;
 
 	//Init player stats
-	this->playerDmg = (player.getProperties(1) * 1.5) + (player.getProperties(3) * 0.2) * 100;
-	this->playerArmor = player.getProperties(2) * 1, 1 + player.getProperties(9) * 0.1;
-	this->playerHpArmor = player.getProperties(4) * this->playerArmor;
+	this->playerDmg = player.getProperties(1);
+	this->playerArmor = 1 + (player.getProperties(2) * 0.1);
+	this->critChance = (player.getProperties(3) * 25) / (player.getProperties(9) * 2) + 25;
+	this->escapeChance = (player.getProperties(3) * 25) / (player.getProperties(9) * 2) + 40;
+	this->combatHealth = player.getProperties(4) * this->playerArmor;
+
+	std::cout << "\ndmg: " << this->playerDmg << std::endl;
+	std::cout << "combat health: " << this->combatHealth << std::endl;
 
 	while (this->enemyHp > 0)
 	{
-		if (player.isDead() == false)
-		{
-			player.setProperties(4, -this->enemyDmg);
-			this->enemyHp = -player.getProperties(1);
-		}
+		if (this->combatHealth <= 0)
+			player.setProperties(4, -100);
+
+		//player.setProperties(4, -this->enemyDmg);
+		this->combatHealth -= this->enemyDmg;
+		this->enemyHp = -this->playerDmg;
+		this->totalDamageTaken += this->enemyDmg;
+
+		std::cout << "enemy hp: " << this->enemyHp << std::endl;
+		std::cout << "hp: " << this->combatHealth << std::endl;
 	}
-	player.setProperties(10, 50); //exp TODO->random
-	player.setProperties(10, 50); //exp TODO->random
+
+	std::cout << "total damage taken: " << this->totalDamageTaken << std::endl;
+	player.setProperties(4, -this->totalDamageTaken);
+
+	//this->coinsDrop = player.getProperties(9) + 5;
+
+	player.setProperties(10, rand() % 50 + 45); //exp 
+	player.setProperties(8, rand() % 5 + 1); //coins 
 }
 
 sf::Text Room::displayText()
@@ -183,7 +199,7 @@ void Room::update(int roomType, Player& player)
 	case 6: //heal
 		player.setProperties(12, 1);
 		if (player.getProperties(4) < player.getProperties(5))
-			player.setProperties(4, 200); 
+			player.setProperties(4, 200 - player.getProperties(9) * 2);
 
 		if (player.getProperties(4) >= player.getProperties(5))
 		{

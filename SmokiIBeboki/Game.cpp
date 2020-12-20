@@ -5,7 +5,7 @@ void Game::initWindow()
 	this->videoMode = sf::VideoMode(800, 800);
 	this->window = new sf::RenderWindow(this->videoMode, "Smoki & Beboki", sf::Style::Close | sf::Style::Titlebar);
 	this->window->setFramerateLimit(60);
-	this->gameIcon.loadFromFile("Textures/gameIcon.png");
+	this->gameIcon.loadFromFile("Textures/dragon.png");
 	this->window->setIcon(this->gameIcon.getSize().x, this->gameIcon.getSize().y, this->gameIcon.getPixelsPtr());
 }
 
