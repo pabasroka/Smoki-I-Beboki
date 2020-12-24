@@ -89,6 +89,11 @@ void Room::setPosition(sf::Vector2f pos)
 	this->roomSprite.setPosition(sf::Vector2f(pos.x, pos.y));
 }
 
+void Room::setRoomType(int type)
+{
+	this->roomType = type;
+}
+
 void Room::combat(Player& player)
 {
 	//Init enemy stats

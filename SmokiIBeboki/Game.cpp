@@ -7,9 +7,14 @@ void Game::initWindow()
 	this->window->setFramerateLimit(60);
 	this->gameIcon.loadFromFile("Textures/dragon.png");
 	this->window->setIcon(this->gameIcon.getSize().x, this->gameIcon.getSize().y, this->gameIcon.getPixelsPtr());
-	this->music.openFromFile("Sound/zelda.ogg");
-	
-	//this->music.play();
+
+	//Background air sound
+	this->air.openFromFile("Sound/air.ogg");
+	this->air.setLoop(true);
+	this->air.play();
+	this->steppingDown.openFromFile("Sound/steppingDown.ogg");
+	this->steppingDown.setLoop(true);
+	this->steppingDown.play();
 }
 
 void Game::initGameRules()
@@ -42,6 +47,11 @@ void Game::initGameOverText(int rooms)
 	this->resetString.str("");
 	this->resetString << "Twoj wynik: " << rooms << " \n \n WCISNIJ 'R' ABY ZRESTARTOWAC !"; 
 	this->resetTxt.setString(this->resetString.str());
+
+	this->bDead.loadFromFile("Sound/dead.ogg");
+	this->sDead.setBuffer(this->bDead);
+	this->sDead.setVolume(50.f);
+	this->sDead.play();
 }
 
 void Game::initSprite()
@@ -110,7 +120,11 @@ void Game::update()
 		this->ui->update();
 
 	if (this->ui->isDead())
+	{
+		
 		this->endGame = true;
+	}
+		
 		
 }
 
@@ -125,6 +139,7 @@ void Game::render()
 
 		this->window->draw(gameOver);
 		this->window->draw(resetTxt);
+		
 		this->reset();
 
 		//Display new frame
@@ -139,15 +154,13 @@ void Game::render()
 		if (this->rulesInfo)
 		{
 			this->window->draw(this->rules);
-			//for (int i = sf::Keyboard::A; i <= sf::Keyboard::Z; i++) sf::Keyboard::
 			// PRESS ANY KEY
 			for(int i = 0; i <= 100; i++)
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(i)))
 					this->rulesInfo = false;
 		}
 		else
-			//Render frame
-			this->ui->render(*this->window);
+			this->ui->render(*this->window); //Render frame
 
 		//Display new frame
 		this->window->display();

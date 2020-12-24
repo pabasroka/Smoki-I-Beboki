@@ -5,11 +5,8 @@ void UI::initSounds()
 	this->bHealing.loadFromFile("Sound/healing.ogg");
 	this->sHealing.setBuffer(this->bHealing);
 
-	//this->bBack.loadFromFile("Sound/back.ogg");
-	//this->sBack.setBuffer(this->bBack);
-
-	this->bDead.loadFromFile("Sound/dead.ogg");
-	this->sDead.setBuffer(this->bDead);
+	this->bBack.loadFromFile("Sound/back.ogg");
+	this->sBack.setBuffer(this->bBack);
 
 	this->bEmpty.loadFromFile("Sound/empty.ogg");
 	this->sEmpty.setBuffer(this->bEmpty);
@@ -28,6 +25,9 @@ void UI::initSounds()
 
 	this->bTreasure.loadFromFile("Sound/treasure.ogg");
 	this->sTreasure.setBuffer(this->bTreasure);
+
+	this->bUpgrade.loadFromFile("Sound/upgrade.ogg");
+	this->sUpgrade.setBuffer(this->bUpgrade);
 }
 
 void UI::initVariables()
@@ -340,12 +340,12 @@ void UI::input()
 		//Arrow right && ROOM B
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && arrowTimer >= arrowTimerMax)
 		{
-			//std::cout << "prawo";
 			this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize); //set default
 			this->arrowR.setTextureRect(arrowsSrc);
 			arrowTimer = 0;
 			if (this->roomB->getRoomType() == 4) //if roomType == back: decrease room counter 
 			{
+				this->sBack.play();
 				player->setProperties(12, -1);
 				this->initRooms();
 			}
@@ -362,16 +362,27 @@ void UI::input()
 			}
 			else
 			{
-				this->updateInsideRoom(this->roomB->getRoomType());
-				this->selectedRoom = this->roomB->getRoomType();
-				this->selectedRoomR = this->roomB;
-				this->isInsideRoom = true;
+				if (this->roomB->getRoomType() == 5) //if random room
+				{
+					this->mysteryNewRoom = this->randomRoom();
+					this->updateInsideRoom(this->mysteryNewRoom);
+					this->selectedRoom = this->mysteryNewRoom;
+					this->roomB->setRoomType(this->mysteryNewRoom);
+					this->selectedRoomR = this->roomB;
+					this->isInsideRoom = true;
+				}
+				else
+				{
+					this->updateInsideRoom(this->roomB->getRoomType());
+					this->selectedRoom = this->roomB->getRoomType();
+					this->selectedRoomR = this->roomB;
+					this->isInsideRoom = true;
+				}	
 			}
 		}
 		//Arrow left && ROOM A
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && arrowTimer >= arrowTimerMax)
 		{
-			//std::cout << "lewo";
 			this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize); //set default
 			this->arrowL.setScale(-5.f, 5.f);
 			this->arrowL.setTextureRect(arrowsSrc);
@@ -379,6 +390,7 @@ void UI::input()
 			if (this->roomA->getRoomType() == 4) //if roomType == back: decrease room counter 
 			{
 				player->setProperties(12, -1);
+				this->sBack.play();
 				this->initRooms();
 			}
 			else if (this->roomA->getRoomType() == 1) //if treasure room, you must have key to open door
@@ -386,7 +398,7 @@ void UI::input()
 				if (player->getProperties(7) >= 1)
 				{
 					player->setProperties(7, -1);
-					this->updateInsideRoom(this->roomA->getRoomType());
+					this->updateInsideRoom(this->roomA->getRoomType());	
 					this->selectedRoom = this->roomA->getRoomType();
 					this->selectedRoomR = this->roomA;
 					this->isInsideRoom = true;
@@ -394,10 +406,22 @@ void UI::input()
 			}
 			else
 			{
-				this->updateInsideRoom(this->roomA->getRoomType());
-				this->selectedRoom = this->roomA->getRoomType();
-				this->selectedRoomR = this->roomA;
-				this->isInsideRoom = true;
+				if (this->roomA->getRoomType() == 5) //if random room
+				{
+					this->mysteryNewRoom = this->randomRoom();
+					this->updateInsideRoom(this->mysteryNewRoom);
+					this->selectedRoom = this->mysteryNewRoom;
+					this->roomA->setRoomType(this->mysteryNewRoom);
+					this->selectedRoomR = this->roomA;
+					this->isInsideRoom = true;
+				}
+				else
+				{
+					this->updateInsideRoom(this->roomA->getRoomType());
+					this->selectedRoom = this->roomA->getRoomType();
+					this->selectedRoomR = this->roomA;
+					this->isInsideRoom = true;
+				}
 			}
 		}
 	}
@@ -405,28 +429,23 @@ void UI::input()
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && arrowTimer >= arrowTimerMax)
 		{
-			std::cout << "gora";
 			this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize);
 			this->arrowU.setTextureRect(arrowsSrc);
 			arrowTimer = 0;
+
 			this->isInsideRoom = false;
-
 			this->playSound(this->selectedRoomR->getRoomType());
-
 			this->selectedRoomR->action(this->selectedRoom, *this->player);
 			this->initRooms();
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && arrowTimer >= arrowTimerMax)
 		{
-			std::cout << "dol";
 			this->arrowsSrc = sf::IntRect(0, this->unitSize, this->unitSize, this->unitSize);
 			this->arrowD.setTextureRect(arrowsSrc);
 			arrowTimer = 0;
+
 			this->isInsideRoom = false;
-
 			this->sEscape.play();
-
-			//setPlayerPropertiesRoom(this->selectedRoom, *this->player);
 			this->selectedRoomR->escape(this->selectedRoom, *this->player);
 			this->initRooms();
 		}
@@ -435,6 +454,7 @@ void UI::input()
 	//INTERACTION IN BOTH OF STATES
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && this->player->getProperties(6) >= 1 && inputTimer >= inputTimerMax)
 	{
+		this->sUpgrade.play();
 		this->player->setProperties(6, -1);
 		this->player->setProperties(2, 1);
 		inputTimer = 0;
@@ -443,6 +463,7 @@ void UI::input()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && this->player->getProperties(6) >= 1 && inputTimer >= inputTimerMax)
 	{
+		this->sUpgrade.play();
 		this->player->setProperties(6, -1);
 		this->player->setProperties(1, 1);
 		inputTimer = 0;
@@ -451,6 +472,7 @@ void UI::input()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && this->player->getProperties(6) >= 1 && inputTimer >= inputTimerMax)
 	{
+		this->sUpgrade.play();
 		this->player->setProperties(6, -1);
 		this->player->setProperties(3, 1);
 		inputTimer = 0;
@@ -459,6 +481,7 @@ void UI::input()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) && this->player->getProperties(8) >= 10 && inputTimer >= inputTimerMax)
 	{
+		this->sUpgrade.play();
 		this->player->setProperties(8, -10);
 		this->player->setProperties(7, 1);
 		inputTimer = 0;
@@ -467,6 +490,7 @@ void UI::input()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X) && this->player->getProperties(8) >= 10 && inputTimer >= inputTimerMax)
 	{
+		this->sUpgrade.play();
 		this->player->setProperties(8, -10);
 		this->player->setProperties(6, 1);
 		inputTimer = 0;
@@ -475,6 +499,7 @@ void UI::input()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C) && this->player->getProperties(8) >= 10 && this->player->getProperties(4) <= 960 && inputTimer >= inputTimerMax)
 	{
+		this->sHealing.play();
 		this->player->setProperties(8, -10);
 		this->player->setProperties(4, 40);
 		inputTimer = 0;
@@ -543,9 +568,6 @@ void UI::playSound(int roomType)
 	case 3:
 		this->sTrap.play();
 		break;
-	case 4:
-		this->sBack.play();
-		break;
 	case 5:
 		this->sSecret.play();
 		break;
@@ -560,16 +582,80 @@ const int& UI::getRoomCounter() const
 	return this->player->getProperties(12);
 }
 
+void UI::randomEnemy()
+{
+	this->randomizeEnemy = rand() % 6;
+	switch (this->randomizeEnemy)
+	{
+	case 0:
+		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		break;
+	case 1:
+		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 51 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		break;
+	case 2:
+		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 54 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		this->insideObject.setPosition(sf::Vector2f(280.f, 120.f));
+		break;
+	case 3:
+		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 57 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		this->insideObject.setPosition(sf::Vector2f(180.f, 140.f));
+		break;
+	case 4:
+		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 60 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		break;
+	case 5:
+		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 63 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		break;
+	}
+}
+
+void UI::randomTrap()
+{
+	this->randomizeTrap = rand() % 2;
+	switch (this->randomizeTrap)
+	{
+	case 0:
+		this->insideObjectSrc = sf::IntRect(57 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		this->insideObject.setPosition(sf::Vector2f(240.f, 180.f));
+		break;
+	case 1:
+		this->insideObjectSrc = sf::IntRect(57 * this->unitSize, 51 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
+		this->insideObject.setPosition(sf::Vector2f(190.f, 80.f));
+		break;
+	}
+}
+
+int UI::randomRoom()
+{
+	this->randomNumber = rand() % 4;
+	switch (this->randomNumber)
+	{
+	case 0: //treasure
+		return 1;
+		break;
+	case 1: //enemy
+		return 2;
+		break;
+	case 2: //trap
+		return 3;
+		break;
+	case 3: //healing
+		return 6;
+		break;
+	default:
+		break;
+	}
+}
+
 void UI::update()
 {
 	if (this->arrowTimer < this->arrowTimerMax) //Incement timer 
-	{
 		arrowTimer++;
-	}
+
 	if (this->inputTimer < this->inputTimerMax) //Incement timer 
-	{
 		inputTimer++;
-	}
+
 	if (this->arrowTimer == this->arrowTimerMax) //Back to unactive arrows sprite
 	{
 		this->arrowsSrc = sf::IntRect(0, 0, this->unitSize, this->unitSize);
@@ -623,27 +709,28 @@ void UI::updateInsideRoom(int roomType)
 	this->insideObject.setScale(5.f, 5.f);
 	switch (roomType)
 	{
-	case 0: 
+	case 0: //empty
 		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 48 * this->unitSize, 0 * this->unitSize, 0 * this->unitSize);
 		break;
-	case 1:
+	case 1: //treasure
 		this->insideObjectSrc = sf::IntRect(51 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);	
 		this->insideObject.setScale(sf::Vector2f(2.7f, 2.7f));
 		this->insideObject.setPosition(sf::Vector2f(320.f, 220.f));
 		break;
-	case 2: 
+	case 2: //enemy 
 		this->randomEnemy();
 		break;
-	case 3: 
+	case 3: //trap
 		this->randomTrap();
 		break;
-	case 4: 
+	case 4: //back
 		this->insideObjectSrc = sf::IntRect(60 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
 		break;
-	case 5:
-		this->insideObjectSrc = sf::IntRect(63 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);	
+	case 5: //mystery
+		//this->insideObjectSrc = sf::IntRect(63 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);	
+		this->randomRoom();
 		break;
-	case 6:
+	case 6: //healing
 		this->insideObjectSrc = sf::IntRect(66 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
 		break;
 	}
@@ -722,52 +809,6 @@ void UI::renderRoom(sf::RenderTarget& target)
 	//Shows message about perks you get
 	target.draw(this->roomA->displayText());
 	target.draw(this->roomB->displayText());
-}
-
-void UI::randomEnemy()
-{
-	this->randomizeEnemy = rand() % 6;
-	switch (this->randomizeEnemy)
-	{
-	case 0:
-		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
-		break;
-	case 1:
-		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 51 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
-		break;
-	case 2:
-		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 54 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
-		this->insideObject.setPosition(sf::Vector2f(280.f, 120.f));
-		break;
-	case 3:
-		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 57 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
-		this->insideObject.setPosition(sf::Vector2f(180.f, 140.f));
-		break;
-	case 4:
-		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 60 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
-		break;
-	case 5:
-		this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 63 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
-		break;
-	}
-
-	
-}
-
-void UI::randomTrap()
-{
-	this->randomizeTrap = rand() % 2;
-	switch (this->randomizeTrap)
-	{
-	case 0:
-		this->insideObjectSrc = sf::IntRect(57 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
-		this->insideObject.setPosition(sf::Vector2f(240.f, 180.f));
-		break;
-	case 1:
-		this->insideObjectSrc = sf::IntRect(57 * this->unitSize, 51 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
-		this->insideObject.setPosition(sf::Vector2f(190.f, 80.f));
-		break;
-	}
 }
 
 void UI::render(sf::RenderTarget& target)

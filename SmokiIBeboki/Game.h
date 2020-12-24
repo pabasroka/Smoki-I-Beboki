@@ -28,8 +28,10 @@ private:
 	bool rulesInfo;
 
 	//Sounds
-	sf::Music music;
-
+	sf::SoundBuffer bDead;
+	sf::Sound sDead;
+	sf::Music air;
+	sf::Music steppingDown;
 
 	// Main game object which includes interface and also mechanics
 	UI* ui;

@@ -1,5 +1,6 @@
 #pragma once
 #include<iostream>
+#include<SFML/Audio.hpp>
 
 class Player
 {
@@ -17,7 +18,6 @@ private:
 	int exp; //10
 	int expMax; //11
 	int doorCounter; //12
-
 
 	void initVariables();
 public:

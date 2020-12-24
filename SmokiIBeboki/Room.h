@@ -46,6 +46,7 @@ public:
 
 	//Setters
 	void setPosition(sf::Vector2f pos);
+	void setRoomType(int type);
 
 	//Functions
 	void combat(Player& player);

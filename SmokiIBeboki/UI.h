@@ -129,6 +129,8 @@ private:
 
 	int randomizeEnemy;
 	int randomizeTrap;
+	int randomNumber;
+	int mysteryNewRoom;
 
 	bool isInsideRoom;
 
@@ -138,9 +140,6 @@ private:
 
 	sf::SoundBuffer bBack;
 	sf::Sound sBack;
-
-	sf::SoundBuffer bDead;
-	sf::Sound sDead;
 
 	sf::SoundBuffer bEmpty;
 	sf::Sound sEmpty;
@@ -159,6 +158,9 @@ private:
 
 	sf::SoundBuffer bTreasure;
 	sf::Sound sTreasure;
+
+	sf::SoundBuffer bUpgrade;
+	sf::Sound sUpgrade;
 
 	void initSounds();
 	void initVariables();
@@ -182,6 +184,10 @@ public:
 	//Getters
 	const int& getRoomCounter() const;
 
+	void randomEnemy(); //inside updateInsideRoom fun in case2: 
+	void randomTrap(); //inside --||-- in case 3:
+	int randomRoom();
+
 	// I only have render function because it is a static interface
 	// dynamic sprites, interface, etc will be in Player class
 	void update();
@@ -191,12 +197,7 @@ public:
 	void renderGV(sf::RenderTarget& target); // I use & to get simple access to Game.cpp
 	void renderGUI(sf::RenderTarget& target); 
 	void renderText(sf::RenderTarget& target);
-
 	void renderRoom(sf::RenderTarget& target);
-
-	void randomEnemy(); //inside updateInsideRoom fun in case2: 
-	void randomTrap(); //inside --||-- in case 3:
-
 	void render(sf::RenderTarget& target);
 };
 
