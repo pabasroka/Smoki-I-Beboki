@@ -193,9 +193,6 @@ void Room::action(int roomType, Player& player)
 		player.setProperties(12, 1); // counter++
 		player.setProperties(7, 1); // key++
 
-		/*player.setProperties(4, -100);
-		player.setProperties(10, 20);
-		*/
 		break;
 	case 3: //trap
 		player.setProperties(12, 1);
@@ -203,6 +200,7 @@ void Room::action(int roomType, Player& player)
 		player.setProperties(10, 10);
 		break;
 	case 4: //back
+		//this->sBack.play();
 		player.setProperties(12, -1);
 		break;
 	case 5: //rand
@@ -250,11 +248,6 @@ void Room::escape(int roomType, Player& player)
 			player.setProperties(7, 1);
 			player.setProperties(4, -50); 
 		}
-		/*else if (this->randNumber > 20 && this->randNumber <= 40)
-		{
-			std::cout << "\n you re lucky one \n";
-			//player.setProperties(4, 0);
-		}*/
 		else if (this->randNumber > 40 && this->randNumber <= 50)
 		{
 			std::cout << "\n niepowodzenie \n";
@@ -262,17 +255,6 @@ void Room::escape(int roomType, Player& player)
 			player.setProperties(7, 1);
 			player.setProperties(4, -50);
 		}
-		/*else if(this->randNumber > 50 && this->randNumber <= 70)
-		{
-			std::cout << "\n you re lucky one \n";
-			//player.setProperties(4, 0);
-		}
-		else
-		{
-			std::cout << "\n you re lucky one \n";
-			//nothing - you are lucky person
-			//player.setProperties(4, 0);
-		}*/
 
 		break;
 	case 3: //trap
@@ -287,27 +269,11 @@ void Room::escape(int roomType, Player& player)
 			std::cout << "\n niepowodzenie \n";
 			player.setProperties(4, -(rand() % 100 + 75));
 		}
-		/*else if (this->randNumber > 20 && this->randNumber <= 40)
-		{
-			std::cout << "\n you re lucky one \n";
-			//player.setProperties(4, 0);
-		}*/
 		else if (this->randNumber > 40 && this->randNumber <= 50)
 		{
 			std::cout << "\n niepowodzenie \n";
 			player.setProperties(4, -(rand() % 100 + 75));
 		}
-		/*else if (this->randNumber > 50 && this->randNumber <= 70)
-		{
-			std::cout << "\n you re lucky one \n";
-			//player.setProperties(4, 0);
-		}
-		else
-		{
-			std::cout << "\n you re lucky one \n";
-			//nothing - you are lucky person
-			//player.setProperties(4, 0);
-		}*/
 
 		break;
 	case 4: //back

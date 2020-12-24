@@ -132,6 +132,35 @@ private:
 
 	bool isInsideRoom;
 
+	/*=====		SOUNDS		=====*/
+	sf::SoundBuffer bHealing;
+	sf::Sound sHealing;
+
+	sf::SoundBuffer bBack;
+	sf::Sound sBack;
+
+	sf::SoundBuffer bDead;
+	sf::Sound sDead;
+
+	sf::SoundBuffer bEmpty;
+	sf::Sound sEmpty;
+
+	sf::SoundBuffer bEnemy;
+	sf::Sound sEnemy;
+
+	sf::SoundBuffer bEscape;
+	sf::Sound sEscape;
+
+	sf::SoundBuffer bSecret;
+	sf::Sound sSecret;
+
+	sf::SoundBuffer bTrap;
+	sf::Sound sTrap;
+
+	sf::SoundBuffer bTreasure;
+	sf::Sound sTreasure;
+
+	void initSounds();
 	void initVariables();
 	void initTextures();
 	void initSprites();
@@ -148,6 +177,7 @@ public:
 	//Functions
 	void input();
 	bool isDead();
+	void playSound(int roomType);
 
 	//Getters
 	const int& getRoomCounter() const;

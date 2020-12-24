@@ -9,7 +9,7 @@ void Game::initWindow()
 	this->window->setIcon(this->gameIcon.getSize().x, this->gameIcon.getSize().y, this->gameIcon.getPixelsPtr());
 	this->music.openFromFile("Sound/zelda.ogg");
 	
-	this->music.play();
+	//this->music.play();
 }
 
 void Game::initGameRules()

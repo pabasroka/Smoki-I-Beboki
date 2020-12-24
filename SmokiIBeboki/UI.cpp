@@ -1,5 +1,35 @@
 #include "UI.h"
 
+void UI::initSounds()
+{
+	this->bHealing.loadFromFile("Sound/healing.ogg");
+	this->sHealing.setBuffer(this->bHealing);
+
+	//this->bBack.loadFromFile("Sound/back.ogg");
+	//this->sBack.setBuffer(this->bBack);
+
+	this->bDead.loadFromFile("Sound/dead.ogg");
+	this->sDead.setBuffer(this->bDead);
+
+	this->bEmpty.loadFromFile("Sound/empty.ogg");
+	this->sEmpty.setBuffer(this->bEmpty);
+
+	this->bEnemy.loadFromFile("Sound/enemy.ogg");
+	this->sEnemy.setBuffer(this->bEnemy);
+
+	this->bEscape.loadFromFile("Sound/escape.ogg");
+	this->sEscape.setBuffer(this->bEscape);
+
+	this->bSecret.loadFromFile("Sound/secret.ogg");
+	this->sSecret.setBuffer(this->bSecret);
+
+	this->bTrap.loadFromFile("Sound/trap.ogg");
+	this->sTrap.setBuffer(this->bTrap);
+
+	this->bTreasure.loadFromFile("Sound/treasure.ogg");
+	this->sTreasure.setBuffer(this->bTreasure);
+}
+
 void UI::initVariables()
 {
 	this->unitSize = 16;
@@ -292,6 +322,7 @@ UI::UI()
 	this->initText();
 	this->update();
 	this->updateText();
+	this->initSounds();
 
 	this->initRooms();
 }
@@ -380,7 +411,8 @@ void UI::input()
 			arrowTimer = 0;
 			this->isInsideRoom = false;
 
-			//setPlayerPropertiesRoom(this->selectedRoom, *this->player);
+			this->playSound(this->selectedRoomR->getRoomType());
+
 			this->selectedRoomR->action(this->selectedRoom, *this->player);
 			this->initRooms();
 		}
@@ -391,6 +423,8 @@ void UI::input()
 			this->arrowD.setTextureRect(arrowsSrc);
 			arrowTimer = 0;
 			this->isInsideRoom = false;
+
+			this->sEscape.play();
 
 			//setPlayerPropertiesRoom(this->selectedRoom, *this->player);
 			this->selectedRoomR->escape(this->selectedRoom, *this->player);
@@ -491,6 +525,34 @@ void UI::input()
 bool UI::isDead()
 {
 	return this->player->isDead();
+}
+
+void UI::playSound(int roomType)
+{
+	switch (roomType)
+	{
+	case 0:
+		this->sEmpty.play();
+		break;
+	case 1:
+		this->sTreasure.play();
+		break;
+	case 2:
+		this->sEnemy.play();
+		break;
+	case 3:
+		this->sTrap.play();
+		break;
+	case 4:
+		this->sBack.play();
+		break;
+	case 5:
+		this->sSecret.play();
+		break;
+	case 6:
+		this->sHealing.play();
+		break;
+	}
 }
 
 const int& UI::getRoomCounter() const

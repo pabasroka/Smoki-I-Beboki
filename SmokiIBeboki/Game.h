@@ -30,6 +30,7 @@ private:
 	//Sounds
 	sf::Music music;
 
+
 	// Main game object which includes interface and also mechanics
 	UI* ui;
 
