@@ -6,7 +6,9 @@ class Game
 {
 private:
 	sf::VideoMode videoMode;
-	sf::RenderWindow* window; //create pointer to window cause I dont want to send copy of it (its kind of an optimalisation)
+	//create pointer to window cause I dont want to send copy of it
+	//(its kind of an optimalisation)
+	sf::RenderWindow* window; 
 	bool endGame;
 	sf::Event sfmlEvent;
 
@@ -20,12 +22,19 @@ private:
 	std::stringstream resetString;
 	sf::Text resetTxt;
 
-	//Objects from other classes
-	//Player* player;
+	//Game rules
+	sf::Texture rulesTxt;
+	sf::Sprite rules;
+	bool rulesInfo;
 
+	//Sounds
+	sf::Music music;
+
+	// Main game object which includes interface and also mechanics
 	UI* ui;
 
 	void initWindow();
+	void initGameRules();
 
 	void initGameOverText(int rooms);
 	void initSprite();
@@ -36,8 +45,6 @@ public:
 
 	//Accessors (getter)
 	const bool& getEndGame() const;
-
-	//Modifiers (setter)
 
 	//Functions (general stuff)
 	const bool running() const;

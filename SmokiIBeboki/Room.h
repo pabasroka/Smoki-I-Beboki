@@ -35,8 +35,6 @@ private:
 	float combatHealth{};
 	float totalDamageTaken{};
 
-	//float coinsDrop;
-
 	void initVariables();
 	void randomGenerator();
 
