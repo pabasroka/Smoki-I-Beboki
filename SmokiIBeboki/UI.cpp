@@ -358,7 +358,7 @@ void UI::input()
 					this->selectedRoom = this->roomB->getRoomType();
 					this->selectedRoomR = this->roomB;
 					this->isInsideRoom = true;
-				}
+				} 
 			}
 			else
 			{
