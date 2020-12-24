@@ -381,7 +381,7 @@ void UI::input()
 			this->isInsideRoom = false;
 
 			//setPlayerPropertiesRoom(this->selectedRoom, *this->player);
-			this->selectedRoomR->update(this->selectedRoom, *this->player);
+			this->selectedRoomR->action(this->selectedRoom, *this->player);
 			this->initRooms();
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && arrowTimer >= arrowTimerMax)
@@ -393,7 +393,7 @@ void UI::input()
 			this->isInsideRoom = false;
 
 			//setPlayerPropertiesRoom(this->selectedRoom, *this->player);
-			this->selectedRoomR->update(this->selectedRoom, *this->player);
+			this->selectedRoomR->escape(this->selectedRoom, *this->player);
 			this->initRooms();
 		}
 	}
@@ -493,9 +493,9 @@ bool UI::isDead()
 	return this->player->isDead();
 }
 
-int const& UI::getRoomCounter() const
+const int& UI::getRoomCounter() const
 {
-	return this->player->getProperties(12); //player->getProperties(12);
+	return this->player->getProperties(12);
 }
 
 void UI::update()
@@ -570,11 +570,9 @@ void UI::updateInsideRoom(int roomType)
 		this->insideObject.setPosition(sf::Vector2f(320.f, 220.f));
 		break;
 	case 2: 
-		//this->insideObjectSrc = sf::IntRect(54 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
 		this->randomEnemy();
 		break;
 	case 3: 
-		//this->insideObjectSrc = sf::IntRect(57 * this->unitSize, 48 * this->unitSize, 3 * this->unitSize, 3 * this->unitSize);
 		this->randomTrap();
 		break;
 	case 4: 

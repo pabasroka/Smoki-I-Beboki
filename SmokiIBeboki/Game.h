@@ -19,7 +19,6 @@ private:
 	sf::Text gameOver;
 	std::stringstream resetString;
 	sf::Text resetTxt;
-	int roomCounter;
 
 	//Objects from other classes
 	//Player* player;
@@ -28,7 +27,7 @@ private:
 
 	void initWindow();
 
-	void initGameOverText();
+	void initGameOverText(int rooms);
 	void initSprite();
 public:
 	//Constructor and Destructor

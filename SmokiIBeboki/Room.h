@@ -56,6 +56,7 @@ public:
 
 	sf::Text displayText();
 	
-	void update(int roomType, Player& player);
+	void action(int roomType, Player& player);
+	void escape(int roomType, Player& player);
 };
 

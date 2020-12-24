@@ -9,7 +9,7 @@ void Game::initWindow()
 	this->window->setIcon(this->gameIcon.getSize().x, this->gameIcon.getSize().y, this->gameIcon.getPixelsPtr());
 }
 
-void Game::initGameOverText()
+void Game::initGameOverText(int rooms)
 {
 	if (!this->font.loadFromFile("Fonts/AncientModernTales-a7Po.ttf"))
 		std::cout << "Could not load font \n";
@@ -28,7 +28,8 @@ void Game::initGameOverText()
 	this->resetTxt.setOutlineColor(sf::Color::Black);
 	this->resetTxt.setOutlineThickness(3.f);
 	this->resetTxt.setPosition(20, 350);
-	this->resetString << "Twoj wynik: " << this->roomCounter << " \n \n WCISNIJ 'R' ABY ZRESTARTOWAC !"; //this->roomCounter << " \n \n WCISNIJ 'R' ABY ZRESTARTOWAC !";
+	this->resetString.str("");
+	this->resetString << "Twoj wynik: " << rooms << " \n \n WCISNIJ 'R' ABY ZRESTARTOWAC !"; 
 	this->resetTxt.setString(this->resetString.str());
 }
 
@@ -41,7 +42,6 @@ Game::Game()
 {
 	this->initWindow();
 	this->initSprite();
-	this->initGameOverText();
 }
 
 Game::~Game()
@@ -98,6 +98,7 @@ void Game::update()
 
 	if (this->ui->isDead())
 		this->endGame = true;
+		
 }
 
 void Game::render()
@@ -106,6 +107,8 @@ void Game::render()
 	{
 		this->window->clear(sf::Color::Black);
 
+		this->initGameOverText(this->ui->getRoomCounter());
+		
 		this->window->draw(gameOver);
 		this->window->draw(resetTxt);
 		this->reset();
@@ -120,7 +123,6 @@ void Game::render()
 
 		//Render frame
 		this->ui->render(*this->window);
-		this->roomCounter = this->ui->getRoomCounter();
 
 		//Display new frame
 		this->window->display();

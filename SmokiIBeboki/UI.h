@@ -149,7 +149,7 @@ public:
 	bool isDead();
 
 	//Getters
-	int const& getRoomCounter() const;
+	const int& getRoomCounter() const;
 
 	// I only have render function because it is a static interface
 	// dynamic sprites, interface, etc will be in Player class
