@@ -50,8 +50,6 @@ public:
 
 	//Functions
 	void combat(Player& player);
-
-	sf::Text displayText();
 	
 	void action(int roomType, Player& player);
 	void escape(int roomType, Player& player);

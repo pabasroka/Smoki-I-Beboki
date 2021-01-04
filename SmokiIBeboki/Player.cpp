@@ -7,9 +7,9 @@ void Player::initVariables()
 	this->hpMax = 1000;
 	this->hp = this->hpMax;
 	this->luck = 1;
-	this->skillPoints = 10; //0
+	this->skillPoints = 10; //10
 	this->keys = 0; //0
-	this->coins = 10; //0
+	this->coins = 10; //10
 	this->lvl = 1;
 	this->expMax = 100; //every level increased by 10
 	this->exp = 0;

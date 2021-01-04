@@ -423,7 +423,7 @@ void UI::input()
 					this->isInsideRoom = true;
 				}
 			}
-		}
+		}	
 	}
 	else
 	{
@@ -508,7 +508,7 @@ void UI::input()
 	}
 
 	/* ==================================== dev tools ==================================== */
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
+	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
 	{
 		this->player->setProperties(4, -1000);
 		this->hpBar.setSize(sf::Vector2f(static_cast<float>(this->player->getProperties(4) * 0.4), 40.f)); // 0.4 -> hbbarwidth/hpMax 400/1000 = 0.4 
@@ -544,7 +544,7 @@ void UI::input()
 		//this->roomA->update(*this->player);
 		//this->isInsideRoom = true;
 	}
-
+	*/
 }
 
 bool UI::isDead()
@@ -805,10 +805,6 @@ void UI::renderRoom(sf::RenderTarget& target)
 		target.draw(this->roomA->getSprite());
 		target.draw(this->roomB->getSprite());
 	}
-	
-	//Shows message about perks you get
-	target.draw(this->roomA->displayText());
-	target.draw(this->roomB->displayText());
 }
 
 void UI::render(sf::RenderTarget& target)

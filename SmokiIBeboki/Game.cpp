@@ -3,7 +3,7 @@
 void Game::initWindow()
 {
 	this->videoMode = sf::VideoMode(800, 800);
-	this->window = new sf::RenderWindow(this->videoMode, "Smoki & Beboki", sf::Style::Close | sf::Style::Titlebar);
+	this->window = new sf::RenderWindow(this->videoMode, "Smoki & Beboki", sf::Style::Close | sf::Style::Titlebar | sf::Style::Default);
 	this->window->setFramerateLimit(60);
 	this->gameIcon.loadFromFile("Textures/dragon.png");
 	this->window->setIcon(this->gameIcon.getSize().x, this->gameIcon.getSize().y, this->gameIcon.getPixelsPtr());
@@ -35,8 +35,8 @@ void Game::initGameOverText(int rooms)
 	this->gameOver.setFillColor(sf::Color::Red);
 	this->gameOver.setOutlineColor(sf::Color::Black);
 	this->gameOver.setOutlineThickness(3.f);
-	this->gameOver.setPosition(120, 200);
-	this->gameOver.setString("KONIEC GRY !");
+	this->gameOver.setPosition(90, 200);
+	this->gameOver.setString("KONIEC   GRY !");
 
 	this->resetTxt.setFont(font);
 	this->resetTxt.setCharacterSize(50);

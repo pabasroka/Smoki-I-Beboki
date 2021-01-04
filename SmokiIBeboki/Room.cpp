@@ -145,41 +145,6 @@ void Room::combat(Player& player)
 	player.setProperties(8, rand() % 5 + 1); //coins 
 }
 
-sf::Text Room::displayText()
-{
-	switch (this->roomType)
-	{
-	case 0:
-		this->text.setString("");
-		return this->text;
-		break;
-	case 1:
-		this->text.setString("");
-		return this->text;
-		break;
-	case 2:
-		this->text.setString("");
-		return this->text;
-		break;
-	case 3:
-		this->text.setString("");
-		return this->text;
-		break;
-	case 4:
-		this->text.setString("");
-		return this->text;
-		break;
-	case 5:
-		this->text.setString("");
-		return this->text;
-	case 6:
-		this->text.setString("");
-		return this->text;
-		break;
-	}
-}
-
-
 void Room::action(int roomType, Player& player)
 {
 	// 1-dmg 2-armor 3-luck 4-hp 5-hpMax 6-SP 7-keys 8-coins 9-lvl 10-exp 11-expMax 12-doorCounter
@@ -194,7 +159,6 @@ void Room::action(int roomType, Player& player)
 		break;
 	case 2: //enemy
 		this->combat(player);
-
 		player.setProperties(12, 1); // counter++
 		player.setProperties(7, 1); // key++
 
